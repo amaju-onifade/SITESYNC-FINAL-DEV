@@ -1,0 +1,172 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: var(--color-background);
+}
+
+.page > * {
+  width: 100%;
+  max-width: 480px;
+}
+
+.page > div:last-child {
+  background: var(--color-background);
+}
+
+.logo {
+  font-size: var(--typography-display-small-font-size);
+  font-weight: 900;
+  color: var(--color-primary);
+  text-align: center;
+  margin-bottom: 32px;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: var(--typography-headline-small-font-size);
+  font-weight: 700;
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--color-on-surface-variant);
+  font-size: var(--typography-body-medium-font-size);
+  margin-bottom: 17px;
+}
+
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.stepDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-outline);
+  transition: background var(--transition-normal);
+}
+
+.stepDotActive {
+  background: var(--color-primary);
+}
+
+.stepLine {
+  width: 48px;
+  height: 2px;
+  background: var(--color-outline);
+  border-radius: 2px;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface-variant);
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  margin-top: 16px;
+  transition: color var(--transition-fast);
+}
+
+.backBtn:hover {
+  color: var(--color-on-surface);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.error {
+  color: var(--color-error);
+  font-size: var(--typography-body-medium-font-size);
+  text-align: center;
+}
+
+.roleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.roleLabel {
+  font-size: var(--typography-body-medium-font-size);
+  font-weight: 600;
+  color: var(--color-on-surface-variant);
+}
+
+.roles {
+  display: flex;
+  gap: 8px;
+}
+
+.radioLabel {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--color-outline);
+  border-radius: 8px;
+  background: var(--color-surface);
+  font-size: var(--typography-body-medium-font-size);
+  cursor: pointer;
+  color: var(--color-on-surface);
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.radioLabel:hover {
+  border-color: var(--color-primary);
+}
+
+.radioActive {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.radioInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 16px;
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface-variant);
+}
+
+.link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--color-primary);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}

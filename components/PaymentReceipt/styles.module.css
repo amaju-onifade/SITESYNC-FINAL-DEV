@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.uploadArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropzone {
+  width: 100%;
+  border: 2px dashed var(--color-outline);
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--color-on-surface-variant);
+  transition: border-color var(--transition-fast);
+}
+
+.dropzone:hover {
+  border-color: var(--color-primary);
+}
+
+.preview {
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.fileName {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface);
+}
+
+.hint {
+  font-size: var(--typography-body-small-font-size);
+  margin-top: 4px;
+}

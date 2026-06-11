@@ -1,0 +1,76 @@
+.page {
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.main {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  font-size: var(--typography-headline-small-font-size);
+  font-weight: 700;
+}
+
+.previewList {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.preview {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.gpsTitle {
+  font-size: var(--typography-title-small-font-size);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.gpsInputs {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.gpsInputs > * {
+  flex: 1;
+}
+
+.status {
+  padding: 12px;
+  border-radius: 8px;
+  font-size: var(--typography-body-medium-font-size);
+  background: var(--color-surface-variant);
+  color: var(--color-on-surface);
+}
+
+.success {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+.benchmarkSelect {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-outline);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-size: var(--typography-body-medium-font-size);
+  margin-bottom: 12px;
+}
+
+.ghostSection {
+  margin-top: 12px;
+}

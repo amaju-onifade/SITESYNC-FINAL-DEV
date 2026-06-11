@@ -1,0 +1,281 @@
+.page {
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.main {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: var(--typography-headline-small-font-size);
+  font-weight: 700;
+}
+
+.address {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface-variant);
+  margin-top: 4px;
+}
+
+.activateCard {
+  margin-bottom: 20px;
+}
+
+.activateText {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface-variant);
+  margin-bottom: 12px;
+}
+
+.section {
+  margin-top: 32px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-size: var(--typography-title-large-font-size);
+  font-weight: 500;
+  padding-top: 2px;
+}
+
+.milestoneList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.milestoneItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dragHandle {
+  cursor: grab;
+  color: var(--color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.milestoneOrder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-surface-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--typography-body-small-font-size);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.milestoneInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.milestoneName {
+  font-size: var(--typography-body-large-font-size);
+  font-weight: 500;
+}
+
+.milestoneDesc {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.daysSince {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+  margin-top: 2px;
+}
+
+.benchmarkGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.benchmarkThumb {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.emptyText {
+  color: var(--color-on-surface-variant);
+  font-size: var(--typography-body-medium-font-size);
+}
+
+.date {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+}
+
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-outline);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Supervisor assignment */
+.supervisorRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.supervisorName {
+  font-size: var(--typography-body-large-font-size);
+  font-weight: 500;
+}
+
+.supervisorEmail {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+}
+
+.assignForm {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.emailInput {
+  flex: 1;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-outline);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-size: var(--typography-body-medium-font-size);
+  font-family: var(--typography-body-medium-font-family);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.emailInput:focus {
+  border-color: var(--color-primary);
+}
+
+.errorMsg {
+  margin-top: 8px;
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-error);
+}
+
+.successMsg {
+  margin-top: 8px;
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-primary);
+}
+
+/* Geofence */
+.geofenceSection {
+  margin-bottom: 24px;
+}
+
+.geofenceStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.geofenceActive {
+  font-size: var(--typography-label-medium-font-size);
+  font-weight: var(--typography-label-medium-font-weight);
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.geofenceWarning {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-error);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.geofenceHint {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+  margin-bottom: 12px;
+}
+
+.geofenceForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.geofenceRow {
+  display: flex;
+  gap: 8px;
+}
+
+.geoInput {
+  flex: 1;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-outline);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-size: var(--typography-body-medium-font-size);
+  font-family: var(--typography-body-medium-font-family);
+  outline: none;
+  transition: border-color var(--transition-fast);
+  width: 100%;
+}
+
+.geoInput:focus {
+  border-color: var(--color-primary);
+}

@@ -1,0 +1,104 @@
+.page {
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.main {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: var(--typography-headline-small-font-size);
+  font-weight: 700;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.projectCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.projectHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.projectName {
+  font-size: var(--typography-title-medium-font-size);
+  font-weight: 500;
+}
+
+.projectAddress {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface-variant);
+}
+
+.projectMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+}
+
+.roleTag {
+  font-size: var(--typography-label-medium-font-size);
+  font-weight: var(--typography-label-medium-font-weight);
+  color: var(--color-primary);
+  background: var(--color-primary-container);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.empty {
+  text-align: center;
+  padding: 32px 0;
+}
+
+.emptyTitle {
+  font-size: var(--typography-title-medium-font-size);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.emptyDesc {
+  color: var(--color-on-surface-variant);
+  margin-bottom: 16px;
+}
+
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-outline);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

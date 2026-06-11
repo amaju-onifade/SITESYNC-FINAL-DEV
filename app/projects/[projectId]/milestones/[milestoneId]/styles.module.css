@@ -1,0 +1,142 @@
+.page {
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.main {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: var(--typography-headline-small-font-size);
+  font-weight: 700;
+}
+
+.desc {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface-variant);
+  margin-top: 4px;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+.sectionTitle {
+  font-size: var(--typography-title-large-font-size);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.updateMeta {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+  margin-bottom: 12px;
+}
+
+.approval {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.approval > * {
+  flex: 1;
+}
+
+.actionBtn {
+  margin-top: 12px;
+}
+
+.emptyText {
+  color: var(--color-on-surface-variant);
+  font-size: var(--typography-body-medium-font-size);
+}
+
+.footerActions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.successMsg {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-primary);
+  text-align: center;
+  padding: 12px;
+}
+
+.paidText {
+  font-size: var(--typography-title-medium-font-size);
+  color: var(--color-tertiary);
+  font-weight: 500;
+  text-align: center;
+}
+
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-outline);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.olderUpdate {
+  margin-top: 4px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-outline);
+  margin: 16px 0;
+}
+
+.olderMediaList {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+.olderThumb {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.olderSummary {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+  margin-bottom: 4px;
+}
+
+.olderStatus {
+  font-size: var(--typography-label-small-font-size);
+  color: var(--color-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+}

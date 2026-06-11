@@ -1,0 +1,46 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: var(--typography-label-medium-font-size);
+  font-weight: var(--typography-label-medium-font-weight);
+  letter-spacing: var(--typography-label-medium-letter-spacing);
+  line-height: var(--typography-label-medium-line-height);
+  text-transform: uppercase;
+}
+
+.pending {
+  background: var(--color-surface-variant);
+  color: var(--color-on-surface-variant);
+}
+
+.active {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+.processing {
+  background: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+.approved {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.revision {
+  background: var(--color-error-container);
+  color: var(--color-on-error-container);
+}
+
+.failed {
+  background: var(--color-error);
+  color: var(--color-on-error);
+}
+
+.paid {
+  background: var(--color-tertiary-container);
+  color: var(--color-on-tertiary-container);
+}
