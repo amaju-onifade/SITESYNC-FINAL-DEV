@@ -32,6 +32,7 @@ export async function queueCapture(data: {
     gpsLng: number | null
     gpsManual: boolean
     deviceTimestamp: string
+    note?: string | null
   }
 }): Promise<void> {
   const db = await openDB()

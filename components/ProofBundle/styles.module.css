@@ -54,6 +54,16 @@
   line-height: 1.6;
 }
 
+.note {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface);
+  line-height: 1.6;
+  font-style: italic;
+  padding: 12px;
+  background: var(--color-surface-container-low);
+  border-radius: 8px;
+}
+
 .elements {
   display: flex;
   flex-direction: column;

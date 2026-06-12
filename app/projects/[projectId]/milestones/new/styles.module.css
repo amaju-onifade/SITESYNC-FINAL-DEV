@@ -7,6 +7,10 @@
   max-width: 480px;
   margin: 0 auto;
   padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 64px);
 }
 
 .title {
@@ -56,4 +60,33 @@
 
 .select:focus {
   border-color: var(--color-primary);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.fileInput {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface);
+  background: var(--color-surface);
+  border: 1px solid var(--color-outline);
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+}
+
+.fileInput:focus {
+  border-color: var(--color-primary);
+}
+
+.hint {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+  margin-top: 4px;
 }

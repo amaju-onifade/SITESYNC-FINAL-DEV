@@ -10,11 +10,20 @@ const CLOUDINARY_CONFIGURED =
   process.env.CLOUDINARY_API_SECRET &&
   process.env.CLOUDINARY_API_SECRET !== 'your-api-secret'
 
-async function uploadFile(file: Buffer, subfolder: string): Promise<string> {
-  if (CLOUDINARY_CONFIGURED) {
-    return uploadToCloudinary(file, subfolder)
+async function uploadFile(file: Buffer, subfolder: string, attempt: number = 0): Promise<string> {
+  try {
+    if (CLOUDINARY_CONFIGURED) {
+      return await uploadToCloudinary(file, subfolder)
+    }
+    return await uploadLocal(file, subfolder)
+  } catch (error) {
+    if (attempt < 3) {
+      const delay = Math.pow(2, attempt) * 1000
+      await new Promise((resolve) => setTimeout(resolve, delay))
+      return uploadFile(file, subfolder, attempt + 1)
+    }
+    throw error
   }
-  return uploadLocal(file, subfolder)
 }
 
 export async function uploadMedia(
@@ -43,5 +52,14 @@ export async function uploadReceipt(
   filename: string
 ): Promise<string> {
   const subfolder = `projects/${projectId}/receipts`
+  return uploadFile(file, subfolder)
+}
+
+export async function uploadInvoice(
+  file: Buffer,
+  projectId: string,
+  filename: string
+): Promise<string> {
+  const subfolder = `projects/${projectId}/invoices`
   return uploadFile(file, subfolder)
 }

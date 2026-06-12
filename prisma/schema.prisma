@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../lib/prisma-client"
 }
 
 datasource db {
@@ -120,6 +121,8 @@ model Milestone {
   description String?
   status      MilestoneStatus @default(PENDING)
   order       Int             @default(0)
+  budgetNgN   Int?
+  invoiceUrl  String?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
@@ -151,6 +154,7 @@ model ProgressUpdate {
   aiCompletionEstimate Int?
   processingStatus     ProcessingStatus @default(PENDING)
   reviewStatus         ReviewStatus     @default(PENDING_REVIEW)
+  supervisorNote       String?
   failureReason        String?
   retryCount           Int              @default(0)
   gpsLat               Float?

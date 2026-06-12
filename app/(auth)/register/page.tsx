@@ -13,30 +13,43 @@ export default function RegisterPage() {
   const router = useRouter()
   const [step, setStep] = useState<1 | 2>(1)
   const [name, setName] = useState('')
+  const [nameDone, setNameDone] = useState(false)
   const [email, setEmail] = useState('')
+  const [emailDone, setEmailDone] = useState(false)
   const [password, setPassword] = useState('')
+  const [passwordDone, setPasswordDone] = useState(false)
   const [role, setRole] = useState<'OWNER' | 'SUPERVISOR'>('OWNER')
-  const [error, setError] = useState('')
+  const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [loading, setLoading] = useState(false)
 
   const handleContinue = (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
+    const newErrors: { [key: string]: string } = {}
     if (!name.trim()) {
-      setError('Please enter your name')
+      newErrors.name = 'This field cannot be empty'
+    } else if (name.trim().length < 2) {
+      newErrors.name = 'Name must be at least 2 characters'
+    }
+    if (!email.trim()) newErrors.email = 'This field cannot be empty'
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
       return
     }
-    if (!email.trim()) {
-      setError('Please enter your email')
-      return
-    }
+    
+    setErrors({})
     setStep(2)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!password.trim()) {
+      setErrors({ password: 'This field cannot be empty' })
+      return
+    }
+
     setLoading(true)
-    setError('')
+    setErrors({})
 
     try {
       const res = await fetch('/api/register', {
@@ -48,7 +61,7 @@ export default function RegisterPage() {
       const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error || 'Registration failed')
+        setErrors({ form: data.error || 'Registration failed' })
         setLoading(false)
         return
       }
@@ -63,7 +76,7 @@ export default function RegisterPage() {
         router.push('/dashboard')
       }
     } catch {
-      setError('Registration failed. Please try again.')
+      setErrors({ form: 'Registration failed. Please try again.' })
       setLoading(false)
     }
   }
@@ -83,37 +96,98 @@ export default function RegisterPage() {
           </div>
 
           {step === 1 ? (
-            <form onSubmit={handleContinue} className={styles.form}>
+            <form onSubmit={handleContinue} className={styles.form} noValidate>
               <Input
                 label="Name"
                 placeholder="Your name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value
+                  setName(val)
+                  if (val.trim() && val.trim().length < 2) {
+                    setErrors((prev) => ({ ...prev, name: 'Name must be at least 2 characters' }))
+                    setNameDone(false)
+                  } else {
+                    setErrors((prev) => {
+                      const { name, ...rest } = prev
+                      return rest
+                    })
+                    if (val.trim().length >= 2) setNameDone(true)
+                  }
+                }}
+                onBlur={() => {
+                  if (!name.trim()) {
+                    setErrors((prev) => ({ ...prev, name: 'This field cannot be empty' }))
+                    setNameDone(false)
+                  } else if (name.trim().length >= 2) {
+                    setNameDone(true)
+                  }
+                }}
+                style={nameDone ? { backgroundColor: 'var(--color-inverse-on-surface)' } : {}}
+                error={errors.name}
                 required
+                autoFocus
               />
               <Input
                 label="Email"
                 type="email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value
+                  setEmail(val)
+                  if (val.trim() && (!val.includes('@') || !val.includes('.'))) {
+                    setEmailDone(false)
+                  } else if (val.trim().includes('@') && val.trim().includes('.')) {
+                    setEmailDone(true)
+                  }
+                }}
+                onBlur={() => {
+                  if (!email.trim()) {
+                    setErrors((prev) => ({ ...prev, email: 'This field cannot be empty' }))
+                    setEmailDone(false)
+                  } else if (email.trim().includes('@') && email.trim().includes('.')) {
+                    setEmailDone(true)
+                  }
+                }}
+                style={emailDone ? { backgroundColor: 'var(--color-inverse-on-surface)' } : {}}
+                error={errors.email}
                 required
               />
-              {error && <p className={styles.error}>{error}</p>}
+              {errors.form && <p className={styles.error}>{errors.form}</p>}
               <Button type="submit" fullWidth>
                 Continue <ArrowRight size={16} style={{ marginLeft: '6px', verticalAlign: 'middle' }} />
               </Button>
             </form>
           ) : (
-            <form onSubmit={handleSubmit} className={styles.form}>
+            <form onSubmit={handleSubmit} className={styles.form} noValidate>
               <Input
                 label="Choose Password"
                 type="password"
                 placeholder="At least 8 characters"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value
+                  setPassword(val)
+                  if (val.trim().length >= 8) {
+                    setPasswordDone(true)
+                  } else {
+                    setPasswordDone(false)
+                  }
+                }}
+                onBlur={() => {
+                  if (!password.trim()) {
+                    setErrors((prev) => ({ ...prev, password: 'This field cannot be empty' }))
+                    setPasswordDone(false)
+                  } else if (password.trim().length >= 8) {
+                    setPasswordDone(true)
+                  }
+                }}
+                style={passwordDone ? { backgroundColor: 'var(--color-inverse-on-surface)' } : {}}
                 required
                 minLength={8}
+                autoFocus
+                error={errors.password}
               />
 
               <div className={styles.roleGroup}>
@@ -136,7 +210,7 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              {error && <p className={styles.error}>{error}</p>}
+              {errors.form && <p className={styles.error}>{errors.form}</p>}
 
               <Button type="submit" fullWidth loading={loading}>
                 Create Account
@@ -153,7 +227,7 @@ export default function RegisterPage() {
             <button
               type="button"
               className={styles.backBtn}
-              onClick={() => { setStep(1); setError('') }}
+              onClick={() => { setStep(1); setErrors({}) }}
             >
               Back
             </button>

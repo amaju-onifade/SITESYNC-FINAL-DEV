@@ -10,12 +10,6 @@ export default function HomePage() {
   const { data: session, status } = useSession()
   const router = useRouter()
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      router.push('/dashboard')
-    }
-  }, [status, router])
-
   if (status === 'loading') {
     return (
       <div className={styles.loading}>
@@ -35,9 +29,15 @@ export default function HomePage() {
           Document site progess. Review anywhere. Instantly.
         </p>
         <div className={styles.actions}>
-          <Button onClick={() => router.push('/login')} size="lg">
-            Get Started
-          </Button>
+          {status === 'authenticated' ? (
+            <Button onClick={() => router.push('/dashboard')} size="lg">
+              Go to Dashboard
+            </Button>
+          ) : (
+            <Button onClick={() => router.push('/login')} size="lg">
+              Get Started
+            </Button>
+          )}
         </div>
       </div>
     </div>

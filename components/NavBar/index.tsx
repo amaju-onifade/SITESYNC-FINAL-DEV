@@ -24,7 +24,8 @@ export function NavBar() {
   const [unreadCount, setUnreadCount] = useState(0)
   const [notifOpen, setNotifOpen] = useState(false)
   const [userOpen, setUserOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const notifRef = useRef<HTMLDivElement>(null)
+  const userRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!session?.user) return
@@ -45,7 +46,11 @@ export function NavBar() {
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      const target = e.target as Node
+      if (
+        notifRef.current && !notifRef.current.contains(target) &&
+        userRef.current && !userRef.current.contains(target)
+      ) {
         setNotifOpen(false)
         setUserOpen(false)
       }
@@ -92,7 +97,7 @@ export function NavBar() {
                 Dashboard
               </Link>
 
-              <div className={styles.notifWrapper} ref={dropdownRef}>
+              <div className={styles.notifWrapper} ref={notifRef}>
                 <button className={styles.notifBtn} onClick={() => { setNotifOpen(!notifOpen); setUserOpen(false) }}>
                   <Bell size={20} />
                   {unreadCount > 0 && <span className={styles.badge}>{unreadCount}</span>}
@@ -128,7 +133,7 @@ export function NavBar() {
                 )}
               </div>
 
-              <div className={styles.notifWrapper} ref={dropdownRef}>
+              <div className={styles.notifWrapper} ref={userRef}>
                 <button className={styles.userBtn} onClick={() => { setUserOpen(!userOpen); setNotifOpen(false) }}>
                   <User size={20} />
                 </button>

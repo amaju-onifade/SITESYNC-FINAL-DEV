@@ -85,6 +85,7 @@ export default function TestAIPage() {
           onChange={(e) => setMilestoneTitle(e.target.value)}
           placeholder="e.g. Foundation, Roofing, Framing"
           style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--color-outline)' }}
+          autoFocus
         />
       </div>
 

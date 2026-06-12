@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/ui/StatusBadge'
 import { PageSkeleton } from '@/components/ui/Skeleton'
+import { DashboardOverview } from './components/DashboardOverview'
 import styles from './styles.module.css'
 
 interface ProjectSummary {
@@ -73,6 +74,13 @@ export default function DashboardPage() {
             </Button>
           )}
         </div>
+
+        {displayProjects.length > 0 && (
+          <DashboardOverview 
+            projects={displayProjects} 
+            isSupervisor={isSupervisor} 
+          />
+        )}
 
         {displayProjects.length === 0 ? (
           <Card padding="lg">

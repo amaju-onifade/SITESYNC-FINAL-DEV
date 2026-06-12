@@ -57,6 +57,7 @@ export default function CapturePage() {
   const [status, setStatus] = useState<string | null>(null)
   const [benchmarks, setBenchmarks] = useState<Benchmark[]>([])
   const [selectedBenchmark, setSelectedBenchmark] = useState<string | null>(null)
+  const [supervisorNote, setSupervisorNote] = useState('')
 
   useEffect(() => {
     fetch(`/api/projects/${projectId}/benchmarks`)
@@ -100,6 +101,7 @@ export default function CapturePage() {
       gpsLng: gpsLng ? parseFloat(gpsLng) : null,
       gpsManual,
       deviceTimestamp: new Date().toISOString(),
+      note: supervisorNote.trim() || null,
     }
 
     // Downscale all images to max 1080p before upload
@@ -114,6 +116,7 @@ export default function CapturePage() {
     if (metadata.gpsLng) formData.append('gpsLng', metadata.gpsLng.toString())
     formData.append('gpsManual', String(metadata.gpsManual))
     formData.append('deviceTimestamp', metadata.deviceTimestamp)
+    if (metadata.note) formData.append('note', metadata.note)
 
     try {
       const res = await fetch(`/api/projects/${projectId}/milestones/${milestoneId}/capture`, {
@@ -207,6 +210,17 @@ export default function CapturePage() {
         )}
 
         <Card variant="outlined" padding="md">
+          <h3 className={styles.gpsTitle}>Note (Optional)</h3>
+          <textarea
+            className={styles.noteInput}
+            placeholder="Add a short note about this update..."
+            rows={3}
+            value={supervisorNote}
+            onChange={(e) => setSupervisorNote(e.target.value)}
+          />
+        </Card>
+
+        <Card variant="outlined" padding="md">
           <h3 className={styles.gpsTitle}>Location</h3>
           <Button variant="ghost" onClick={captureGps}>
             {gpsLat ? 'Re-capture GPS' : 'Capture GPS Coordinates'}
@@ -221,6 +235,7 @@ export default function CapturePage() {
                 placeholder="e.g. 6.5244"
                 value={gpsLat}
                 onChange={(e) => setGpsLat(e.target.value)}
+                autoFocus
               />
               <Input
                 label="Longitude"

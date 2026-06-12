@@ -12,6 +12,7 @@ type ProofBundleProps = {
   processingStatus: string
   failureReason?: string | null
   mediaUrls: string[]
+  supervisorNote?: string | null
 }
 
 export function ProofBundle({
@@ -22,29 +23,47 @@ export function ProofBundle({
   processingStatus,
   failureReason,
   mediaUrls,
+  supervisorNote,
 }: ProofBundleProps) {
+  const mediaSection = (
+    <Card variant="outlined" padding="md" className={styles.mediaCard}>
+      <h4 className={styles.sectionTitle}>Captured Media</h4>
+      <div className={styles.mediaGrid}>
+        {mediaUrls.map((url, i) => (
+          <img key={i} src={url} alt={`Capture ${i + 1}`} className={styles.media} />
+        ))}
+      </div>
+    </Card>
+  )
+
   if (processingStatus === 'FAILED') {
     return (
-      <Card variant="outlined" padding="lg">
-        <div className={styles.failed}>
-          <p className={styles.failedTitle}>AI Report Unavailable</p>
-          <p className={styles.failedDesc}>
-            {failureReason || 'The AI could not process this capture.'}
-          </p>
-          <p className={styles.failedHint}>Manual review required to proceed.</p>
-        </div>
-      </Card>
+      <div className={styles.bundle}>
+        <Card variant="outlined" padding="lg">
+          <div className={styles.failed}>
+            <p className={styles.failedTitle}>AI Report Unavailable</p>
+            <p className={styles.failedDesc}>
+              {failureReason || 'The AI could not process this capture.'}
+            </p>
+            <p className={styles.failedHint}>Manual review required to proceed.</p>
+          </div>
+        </Card>
+        {mediaSection}
+      </div>
     )
   }
 
   if (processingStatus === 'PENDING' || processingStatus === 'PROCESSING') {
     return (
-      <Card variant="outlined" padding="lg">
-        <div className={styles.loading}>
-          <div className={styles.spinner} />
-          <p>AI is analyzing your capture...</p>
-        </div>
-      </Card>
+      <div className={styles.bundle}>
+        <Card variant="outlined" padding="lg">
+          <div className={styles.loading}>
+            <div className={styles.spinner} />
+            <p>AI is analyzing your capture...</p>
+          </div>
+        </Card>
+        {mediaSection}
+      </div>
     )
   }
 
@@ -64,9 +83,16 @@ export function ProofBundle({
           )}
         </div>
 
+        {supervisorNote && (
+          <div className={styles.section}>
+            <h4 className={styles.sectionTitle}>Supervisor Note</h4>
+            <p className={styles.note}>{supervisorNote}</p>
+          </div>
+        )}
+
         {summary && (
           <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Summary</h4>
+            <h4 className={styles.sectionTitle}>AI Analysis</h4>
             <p className={styles.summary}>{summary}</p>
           </div>
         )}
@@ -102,14 +128,7 @@ export function ProofBundle({
         )}
       </Card>
 
-      <Card variant="outlined" padding="md">
-        <h4 className={styles.sectionTitle}>Captured Media</h4>
-        <div className={styles.mediaGrid}>
-          {mediaUrls.map((url, i) => (
-            <img key={i} src={url} alt={`Capture ${i + 1}`} className={styles.media} />
-          ))}
-        </div>
-      </Card>
+      {mediaSection}
     </div>
   )
 }

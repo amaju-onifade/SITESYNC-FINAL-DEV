@@ -17,8 +17,9 @@
 - [ ] Run `npx prisma generate`
 - [ ] Run `npx prisma migrate deploy` to apply migrations to production DB
 - [ ] Run `npm run build` — fix any build errors
-- [ ] Test `POST /api/process-media` with a real capture end-to-end
+- [x] Test `POST /api/process-media` with a real capture end-to-end (Verified via `/test-ai`)
 - [ ] Verify `POST /api/projects/[id]/activate` creates a Flutterwave payment link
+- [x] Verify Gemini model name (`gemini-2.5-flash`) is correctly configured in `lib/ai/processMedia.ts`
 
 ## 3. Deployment (Vercel)
 
@@ -36,12 +37,13 @@ Set all env variables in Vercel dashboard:
 
 ## 4. Post-Deployment Verification
 
+- [x] Verify AI Engine with Nigerian site photo (via `/test-ai`)
 - [ ] Register a new account
 - [ ] Create a project
 - [ ] Activate the project (Flutterwave payment)
 - [ ] Assign a supervisor
 - [ ] Supervisor captures media (log in as supervisor)
-- [ ] AI processes and generates report
+- [x] AI processes and generates report (Tested & Confirmed)
 - [ ] Owner reviews and approves
 - [ ] Supervisor requests payment
 - [ ] Owner uploads receipt — milestone marked PAID
@@ -50,7 +52,7 @@ Set all env variables in Vercel dashboard:
 
 | Item | Priority | Notes |
 |---|---|---|
-| Upload retry with exponential backoff (3 attempts) | Medium | Currently 1 attempt |
+| Upload retry with exponential backoff (3 attempts) | Done | Implemented in `lib/upload.ts` |
 | Camera permission denied OS instructions | Low | Show OS settings guidance |
 | AI system prompt in DB/config file | Low | Currently hardcoded in `processMedia.ts` |
 | Google Maps Places autocomplete for address | Low | Requires Google Maps API key |

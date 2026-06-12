@@ -26,14 +26,21 @@ export default function NewMilestonePage() {
   const router = useRouter()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [presetIndex, setPresetIndex] = useState<number | null>(null)
+  const [budget, setBudget] = useState('')
+  const [invoiceFile, setInvoiceFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const handlePresetSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const preset = PRESETS.find((p) => p.title === e.target.value)
-    if (preset) {
+    const idx = e.target.value ? parseInt(e.target.value, 10) : -1
+    if (idx >= 0) {
+      const preset = PRESETS[idx]
       setTitle(preset.title)
       setDescription(preset.description)
+      setPresetIndex(idx)
+    } else {
+      setPresetIndex(null)
     }
   }
 
@@ -43,10 +50,35 @@ export default function NewMilestonePage() {
     setError('')
 
     try {
+      let invoiceUrl = ''
+      if (invoiceFile) {
+        const fData = new FormData()
+        fData.append('projectId', projectId)
+        fData.append('invoice', invoiceFile)
+        const uploadRes = await fetch('/api/upload-invoice', {
+          method: 'POST',
+          body: fData
+        })
+        if (!uploadRes.ok) {
+          const data = await uploadRes.json()
+          setError(data.error || 'Failed to upload invoice')
+          setLoading(false)
+          return
+        }
+        const data = await uploadRes.json()
+        invoiceUrl = data.url
+      }
+
       const res = await fetch(`/api/projects/${projectId}/milestones`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description }),
+        body: JSON.stringify({
+          title,
+          description,
+          budgetNgN: budget || null,
+          invoiceUrl: invoiceUrl || null,
+          ...(presetIndex !== null ? { order: presetIndex } : {}),
+        }),
       })
 
       const data = await res.json()
@@ -58,8 +90,9 @@ export default function NewMilestonePage() {
       }
 
       router.push(`/projects/${projectId}`)
-    } catch {
-      setError('Failed to create milestone')
+    } catch (err: any) {
+      console.error('Milestone creation error:', err)
+      setError(err?.message || 'Failed to create milestone')
       setLoading(false)
     }
   }
@@ -74,10 +107,10 @@ export default function NewMilestonePage() {
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.field}>
               <label className={styles.label}>Quick Select (Optional)</label>
-              <select className={styles.select} onChange={handlePresetSelect} defaultValue="">
-                <option value="">-- Choose a preset milestone --</option>
-                {PRESETS.map((p) => (
-                  <option key={p.title} value={p.title}>{p.title}</option>
+              <select className={styles.select} onChange={handlePresetSelect} defaultValue="-1">
+                <option value="-1">-- Choose a preset milestone --</option>
+                {PRESETS.map((p, i) => (
+                  <option key={p.title} value={i}>{p.title}</option>
                 ))}
               </select>
             </div>
@@ -86,8 +119,14 @@ export default function NewMilestonePage() {
               label="Milestone Title"
               placeholder="e.g. Foundation"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                setTitle(e.target.value)
+                if (presetIndex !== null && e.target.value !== PRESETS[presetIndex]?.title) {
+                  setPresetIndex(null)
+                }
+              }}
               required
+              autoFocus
             />
             <Input
               label="Description (Optional)"
@@ -95,6 +134,27 @@ export default function NewMilestonePage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
+
+            <div className={styles.row}>
+              <Input
+                label="Budget (Optional, ₦)"
+                type="number"
+                placeholder="e.g. 500000"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.label}>Invoice / Quote (Optional)</label>
+              <input
+                type="file"
+                className={styles.fileInput}
+                onChange={(e) => setInvoiceFile(e.target.files?.[0] || null)}
+                accept=".pdf,image/*"
+              />
+              <p className={styles.hint}>PDF or Image of the official quote/invoice</p>
+            </div>
 
             {error && <p className={styles.error}>{error}</p>}
 

@@ -368,7 +368,43 @@ export default function ProjectDetailPage() {
           )}
         </div>
 
-        {/* Owner-only settings */}
+        {/* Recent Activity */}
+        {project.progressUpdates && (project.progressUpdates as any[]).length > 0 && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Recent Activity</h2>
+            <div className={styles.activityList}>
+              {(project.progressUpdates as any[]).map((update) => (
+                <Card 
+                  key={update.id} 
+                  variant="outlined" 
+                  padding="sm" 
+                  className={styles.activityCard}
+                  onClick={() => router.push(`/projects/${projectId}/milestones/${update.milestoneId}`)}
+                >
+                  <div className={styles.activityHeader}>
+                    <span className={styles.activityMilestone}>
+                      {update.milestone?.title || 'Update'}
+                    </span>
+                    <span className={styles.activityDate}>
+                      {new Date(update.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <div className={styles.activityMedia}>
+                    {update.rawMediaUrls?.slice(0, 4).map((url: string, i: number) => (
+                      <img key={i} src={url} alt="Capture" className={styles.activityThumb} />
+                    ))}
+                    {update.rawMediaUrls?.length > 4 && (
+                      <div className={styles.moreMedia}>+{update.rawMediaUrls.length - 4}</div>
+                    )}
+                  </div>
+                  {update.aiDescription && (
+                    <p className={styles.activitySummary}>{update.aiDescription}</p>
+                  )}
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
         {isOwner && (
           <>
             {/* Supervisor Assignment */}
@@ -406,6 +442,7 @@ export default function ProjectDetailPage() {
                           setAssignError('')
                           setAssignSuccess('')
                         }}
+                        autoFocus
                       />
                       <Button
                         size="sm"
@@ -454,6 +491,7 @@ export default function ProjectDetailPage() {
                       placeholder="Center latitude (e.g. 6.5244)"
                       value={geofenceLat}
                       onChange={(e) => setGeofenceLat(e.target.value)}
+                      autoFocus
                     />
                     <input
                       className={styles.geoInput}

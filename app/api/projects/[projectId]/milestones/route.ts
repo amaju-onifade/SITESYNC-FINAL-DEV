@@ -44,13 +44,54 @@ export async function POST(
   }
 
   const { projectId } = await params
-  const { title, description, order } = await req.json()
+  const { title, description, order, budgetNgN, invoiceUrl } = await req.json()
 
-  const milestone = await prisma.milestone.create({
-    data: { projectId, title, description, order: order || 0 },
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+    select: { ownerId: true },
   })
 
-  return NextResponse.json({ milestone }, { status: 201 })
+  if (!project) {
+    return NextResponse.json({ error: 'Project not found' }, { status: 404 })
+  }
+
+  if (project.ownerId !== session.user.id) {
+    return NextResponse.json({ error: 'Only the project owner can add milestones' }, { status: 403 })
+  }
+
+  const lastMilestone = await prisma.milestone.findFirst({
+    where: { projectId },
+    orderBy: { order: 'desc' },
+    select: { order: true },
+  })
+
+  const nextOrder = typeof order === 'number' ? order : (lastMilestone?.order ?? -1) + 1
+
+  try {
+    const milestone = await prisma.milestone.create({
+      data: { 
+        projectId, 
+        title, 
+        description, 
+        order: nextOrder,
+        budgetNgN: budgetNgN !== null && budgetNgN !== undefined && budgetNgN !== '' 
+          ? parseInt(String(budgetNgN), 10) 
+          : null,
+        invoiceUrl: invoiceUrl || null
+      },
+    })
+    return NextResponse.json({ milestone }, { status: 201 })
+  } catch (error: any) {
+    console.error('API Milestone Creation Error:', {
+      message: error.message,
+      stack: error.stack,
+      data: { projectId, title, budgetNgN, invoiceUrl }
+    })
+    return NextResponse.json(
+      { error: 'Failed to create milestone: ' + error.message },
+      { status: 500 }
+    )
+  }
 }
 
 export async function PATCH(

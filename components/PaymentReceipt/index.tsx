@@ -41,6 +41,7 @@ export function PaymentReceipt({ onSubmit, loading }: PaymentReceiptProps) {
         placeholder="e.g. 500000"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
+        autoFocus
       />
 
       <div className={styles.uploadArea}>

@@ -17,6 +17,8 @@ type MilestoneDetail = {
   description: string | null
   status: string
   order: number
+  budgetNgN: number | null
+  invoiceUrl: string | null
   progressUpdates: any[]
   paymentRequests: any[]
   project: {
@@ -93,6 +95,27 @@ export default function MilestoneDetailPage() {
           <StatusBadge status={milestone.status} />
         </div>
 
+        {(milestone.budgetNgN || milestone.invoiceUrl) && (
+          <Card variant="outlined" padding="md" className={styles.budgetCard}>
+            <div className={styles.budgetGrid}>
+              {milestone.budgetNgN && (
+                <div className={styles.budgetItem}>
+                  <span className={styles.budgetLabel}>Budget</span>
+                  <span className={styles.budgetValue}>₦{milestone.budgetNgN.toLocaleString()}</span>
+                </div>
+              )}
+              {milestone.invoiceUrl && (
+                <div className={styles.budgetItem}>
+                  <span className={styles.budgetLabel}>Document</span>
+                  <a href={milestone.invoiceUrl} target="_blank" rel="noopener noreferrer" className={styles.invoiceLink}>
+                    View Invoice
+                  </a>
+                </div>
+              )}
+            </div>
+          </Card>
+        )}
+
         {isSupervisor && (milestone.status === 'PENDING' || milestone.status === 'IN_PROGRESS' || milestone.status === 'REVISION_REQUESTED') && (
           <Button
             fullWidth
@@ -103,7 +126,7 @@ export default function MilestoneDetailPage() {
           </Button>
         )}
 
-        {milestone.progressUpdates.length > 0 && isOwner && (
+        {milestone.progressUpdates.length > 0 && (
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>Progress Updates ({milestone.progressUpdates.length})</h2>
 
@@ -125,6 +148,7 @@ export default function MilestoneDetailPage() {
                       processingStatus={update.processingStatus}
                       failureReason={update.failureReason}
                       mediaUrls={update.rawMediaUrls}
+                      supervisorNote={update.supervisorNote}
                     />
 
                     {update.processingStatus === 'FAILED' && (

@@ -38,6 +38,7 @@ export async function POST(
     const gpsLng = formData.get('gpsLng') ? parseFloat(formData.get('gpsLng') as string) : null
     const gpsManual = formData.get('gpsManual') === 'true'
     const deviceTimestamp = formData.get('deviceTimestamp') as string || null
+    const supervisorNote = formData.get('note') as string || null
 
     if (files.length === 0) {
       return NextResponse.json({ error: 'At least one media file required' }, { status: 400 })
@@ -92,6 +93,7 @@ export async function POST(
         rawMediaUrls: mediaUrls,
         processingStatus: 'PENDING',
         reviewStatus: 'PENDING_REVIEW',
+        supervisorNote,
         gpsLat,
         gpsLng,
         gpsManual,
