@@ -45,10 +45,27 @@ export async function POST(
 
     const project = await prisma.project.findUnique({
       where: { id: projectId },
-      select: { geofence: true },
+      include: { milestones: { where: { id: milestoneId } } },
     })
 
-    if (project?.geofence && gpsLat !== null && gpsLng !== null) {
+    if (!project) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 })
+    }
+
+    if (project.milestones.length === 0) {
+      return NextResponse.json({ error: 'Milestone not found' }, { status: 404 })
+    }
+
+    // Verify supervisor exists (handles stale sessions)
+    const supervisor = await prisma.user.findUnique({
+      where: { id: session.user.id }
+    })
+
+    if (!supervisor) {
+      return NextResponse.json({ error: 'Session invalid. Please login again.' }, { status: 401 })
+    }
+
+    if (project.geofence && gpsLat !== null && gpsLng !== null) {
       const boundary = (project.geofence as any).boundary as Array<{ lat: number; lng: number }>
       if (boundary && boundary.length > 2) {
         if (!isPointInPolygon(gpsLat, gpsLng, boundary)) {
@@ -71,7 +88,7 @@ export async function POST(
       data: {
         projectId,
         milestoneId,
-        supervisorId: session.user.id,
+        supervisorId: supervisor.id,
         rawMediaUrls: mediaUrls,
         processingStatus: 'PENDING',
         reviewStatus: 'PENDING_REVIEW',

@@ -38,12 +38,21 @@ export async function POST(req: Request) {
       ? await prisma.user.findUnique({ where: { email: supervisorEmail } })
       : null
 
+    // Verify owner exists (handles stale sessions after DB reset)
+    const owner = await prisma.user.findUnique({
+      where: { id: session.user.id }
+    })
+
+    if (!owner) {
+      return NextResponse.json({ error: 'Session invalid. Please login again.' }, { status: 401 })
+    }
+
     const project = await prisma.project.create({
       data: {
         name,
         address,
         geofence: geofence || null,
-        ownerId: session.user.id,
+        ownerId: owner.id,
         supervisorId: supervisor?.id || null,
       },
     })
