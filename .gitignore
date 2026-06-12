@@ -1,4 +1,8 @@
 node_modules/
 .next/
 *.local
+.env
 .DS_Store
+*.txt
+tmp/
+_test-gemini.cjs
