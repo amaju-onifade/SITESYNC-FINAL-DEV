@@ -59,14 +59,6 @@ export default function ProjectDetailPage() {
   const [geofenceLoading, setGeofenceLoading] = useState(false)
   const [geofenceMsg, setGeofenceMsg] = useState('')
 
-  const statusOrder: Record<string, number> = {
-    AWAITING_REVIEW: 0,
-    REVISION_REQUESTED: 1,
-    IN_PROGRESS: 2,
-    PENDING: 3,
-    APPROVED: 4,
-    PAID: 5,
-  }
 
   const fetchProject = () => {
     fetch(`/api/projects/${projectId}`)
@@ -74,7 +66,7 @@ export default function ProjectDetailPage() {
       .then((data) => {
         setProject(data.project)
         const ms = (data.project.milestones || []).slice()
-        ms.sort((a: any, b: any) => (statusOrder[a.status] ?? 99) - (statusOrder[b.status] ?? 99))
+        ms.sort((a: any, b: any) => a.order - b.order)
         setMilestones(ms)
       })
       .finally(() => setLoading(false))
