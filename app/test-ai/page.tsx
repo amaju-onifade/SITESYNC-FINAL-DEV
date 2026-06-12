@@ -6,12 +6,15 @@ import type { AIAnalysisResult } from '@/types'
 
 export default function TestAIPage() {
   const [file, setFile] = useState<File | null>(null)
+  const [benchmark, setBenchmark] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
+  const [benchmarkPreview, setBenchmarkPreview] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<AIAnalysisResult | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [milestoneTitle, setMilestoneTitle] = useState('Foundation Work')
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const benchmarkInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0]
@@ -25,6 +28,18 @@ export default function TestAIPage() {
     }
   }
 
+  const handleBenchmarkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0]
+    if (selected) {
+      setBenchmark(selected)
+      const reader = new FileReader()
+      reader.onloadend = () => setBenchmarkPreview(reader.result as string)
+      reader.readAsDataURL(selected)
+      setResult(null)
+      setError(null)
+    }
+  }
+
   const handleUpload = async () => {
     if (!file) return
     setLoading(true)
@@ -32,6 +47,9 @@ export default function TestAIPage() {
     
     const formData = new FormData()
     formData.append('image', file)
+    if (benchmark) {
+      formData.append('benchmark', benchmark)
+    }
     formData.append('milestoneTitle', milestoneTitle)
 
     try {
@@ -70,26 +88,57 @@ export default function TestAIPage() {
         />
       </div>
 
-      <div 
-        className={styles.uploadSection} 
-        onClick={() => fileInputRef.current?.click()}
-      >
-        <input 
-          type="file" 
-          ref={fileInputRef} 
-          className={styles.input} 
-          onChange={handleFileChange} 
-          accept="image/*"
-        />
-        
-        {preview ? (
-          <img src={preview} alt="Preview" className={styles.preview} />
-        ) : (
-          <div className={styles.uploadLabel}>
-            <span className={styles.uploadIcon}>📸</span>
-            <p>Click or drag image to test</p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+        <div className="capture-box">
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Current Capture</label>
+          <div 
+            className={styles.uploadSection} 
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              className={styles.input} 
+              onChange={handleFileChange} 
+              accept="image/*"
+            />
+            
+            {preview ? (
+              <img src={preview} alt="Preview" className={styles.preview} />
+            ) : (
+              <div className={styles.uploadLabel}>
+                <span className={styles.uploadIcon}>📸</span>
+                <p>Upload Capture</p>
+              </div>
+            )}
           </div>
-        )}
+        </div>
+
+        <div className="benchmark-box">
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Benchmark Reference (Optional)</label>
+          <div 
+            className={styles.uploadSection} 
+            onClick={() => benchmarkInputRef.current?.click()}
+            style={{ borderColor: benchmarkPreview ? 'var(--color-primary)' : 'var(--color-outline)' }}
+          >
+            <input 
+              type="file" 
+              ref={benchmarkInputRef} 
+              className={styles.input} 
+              onChange={handleBenchmarkChange} 
+              accept="image/*"
+            />
+            
+            {benchmarkPreview ? (
+              <img src={benchmarkPreview} alt="Benchmark" className={styles.preview} />
+            ) : (
+              <div className={styles.uploadLabel}>
+                <span className={styles.uploadIcon}>🎯</span>
+                <p>Upload Benchmark</p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div style={{ marginTop: '24px' }}>

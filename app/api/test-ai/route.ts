@@ -13,22 +13,28 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData()
     const file = formData.get('image') as File
+    const benchmarkFile = formData.get('benchmark') as File | null
     const milestoneTitle = formData.get('milestoneTitle') as string || 'Test Milestone'
     
     if (!file) {
       return NextResponse.json({ error: 'No image provided' }, { status: 400 })
     }
 
-    // Convert file to buffer
+    // Convert and upload main image
     const buffer = Buffer.from(await file.arrayBuffer())
-    
-    // Upload image using existing logic
-    // Using a dummy 'test' projectId
     const url = await uploadMedia(buffer, 'test-project', file.name)
     
+    // Convert and upload benchmark image if provided
+    let benchmarkUrl: string | undefined
+    if (benchmarkFile && benchmarkFile.size > 0) {
+      const benchmarkBuffer = Buffer.from(await benchmarkFile.arrayBuffer())
+      benchmarkUrl = await uploadMedia(benchmarkBuffer, 'test-project', `benchmark_${benchmarkFile.name}`)
+    }
+
     // Process media with AI
     const result = await processMedia([url], {
       milestoneTitle: milestoneTitle,
+      benchmarkUrls: benchmarkUrl ? [benchmarkUrl] : [],
     })
 
     return NextResponse.json({
