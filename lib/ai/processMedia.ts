@@ -5,7 +5,7 @@ import path from 'path'
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' })
 
-const AI_TIMEOUT_MS = 20_000
+const AI_TIMEOUT_MS = 60_000
 
 const PROMPT = `You are a construction auditor. Analyze the provided construction site images against the project context and output a structured JSON report.
 
