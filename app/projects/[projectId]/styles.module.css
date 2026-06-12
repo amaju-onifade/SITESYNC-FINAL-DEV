@@ -292,14 +292,14 @@
 
 .summaryHeader {
   padding: 24px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, #008f5d 100%);
-  color: var(--color-on-primary);
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  border-bottom: 1px solid var(--color-outline);
 }
 
 .summaryTitle {
   font-size: var(--typography-label-large-font-size);
   font-weight: 700;
-  opacity: 0.9;
   text-transform: uppercase;
   letter-spacing: 0.8px;
 }
@@ -316,20 +316,22 @@
   grid-template-columns: repeat(3, 1fr);
   padding: 20px;
   gap: 16px;
-  background: var(--color-surface);
+  background: var(--color-surface-container-low);
 }
 
 .statItem {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 8px;
+  padding: 12px;
   border-radius: 8px;
-  transition: background var(--transition-fast);
+  background: var(--color-surface);
+  border: 1px solid var(--color-outline-variant);
+  transition: transform var(--transition-fast);
 }
 
 .statItem:hover {
-  background: var(--color-surface-variant);
+  transform: translateY(-2px);
 }
 
 .statLabel {
