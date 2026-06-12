@@ -47,13 +47,11 @@ export default function ProjectDetailPage() {
   const [loading, setLoading] = useState(true)
   const [activating, setActivating] = useState(false)
 
-  // Supervisor assignment state
   const [supervisorEmail, setSupervisorEmail] = useState('')
   const [assignLoading, setAssignLoading] = useState(false)
   const [assignError, setAssignError] = useState('')
   const [assignSuccess, setAssignSuccess] = useState('')
 
-  // Geofence state
   const [geofenceLat, setGeofenceLat] = useState('')
   const [geofenceLng, setGeofenceLng] = useState('')
   const [geofenceRadius, setGeofenceRadius] = useState('')
@@ -98,7 +96,6 @@ export default function ProjectDetailPage() {
 
   useEffect(() => {
     fetchProject()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId])
 
   const handleActivate = async () => {
@@ -174,7 +171,6 @@ export default function ProjectDetailPage() {
     const lng = parseFloat(geofenceLng)
     const radiusM = parseFloat(geofenceRadius)
 
-    // Build an approximate bounding polygon (8-point circle approximation)
     const boundary = Array.from({ length: 8 }, (_, i) => {
       const angle = (i / 8) * 2 * Math.PI
       const dLat = (radiusM / 111320) * Math.cos(angle)
@@ -221,6 +217,10 @@ export default function ProjectDetailPage() {
 
   const isOwner = session?.user?.id === project.owner.id
   const geofenceSet = project.geofence !== null
+  const totalMilestones = project.milestones.length
+  const completedMilestones = project.milestones.filter(m => m.status === 'APPROVED' || m.status === 'PAID').length
+  const progressPercent = totalMilestones > 0 ? Math.round((completedMilestones / totalMilestones) * 100) : 0
+  const totalPaid = project.paymentRecords.reduce((acc, pr) => acc + pr.paidAmountNgN, 0)
 
   return (
     <div className={styles.page}>
@@ -232,6 +232,30 @@ export default function ProjectDetailPage() {
             <p className={styles.address}>{project.address}</p>
           </div>
           <StatusBadge status={project.status} />
+        </div>
+
+        {/* Project Summary Card */}
+        <div className={styles.summaryCard}>
+          <div className={styles.summaryHeader}>
+            <div className={styles.summaryTitle}>Overall Progress</div>
+            <div className={styles.summaryProgress}>{progressPercent}%</div>
+          </div>
+          <div className={styles.summaryStats}>
+            <div className={styles.statItem}>
+              <div className={styles.statLabel}>Milestones</div>
+              <div className={styles.statValue}>{completedMilestones}/{totalMilestones}</div>
+            </div>
+            <div className={styles.statItem}>
+              <div className={styles.statLabel}>Total Paid</div>
+              <div className={styles.statValue}>₦{totalPaid.toLocaleString()}</div>
+            </div>
+            <div className={styles.statItem}>
+              <div className={styles.statLabel}>Status</div>
+              <div className={styles.statValue} style={{ fontSize: '14px', textTransform: 'capitalize' }}>
+                {project.status.toLowerCase().replace('_', ' ')}
+              </div>
+            </div>
+          </div>
         </div>
 
         {project.status === 'CREATED' && isOwner && (
