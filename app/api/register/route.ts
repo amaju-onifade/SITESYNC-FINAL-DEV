@@ -23,6 +23,22 @@ export async function POST(req: Request) {
         email,
         passwordHash,
         role: role || 'OWNER',
+        ownedProjects: (role === 'OWNER' || !role) ? {
+          create: {
+            name: 'Demo: Luxury Duplex',
+            address: 'Plot 12, Banana Island, Lagos',
+            status: 'ACTIVE',
+            milestones: {
+              create: [
+                { title: 'Foundation', order: 0, status: 'PAID' },
+                { title: 'Blockwork', order: 1, status: 'APPROVED' },
+                { title: 'Roofing', order: 2, status: 'PENDING' },
+                { title: 'MEP (Plumbing & Electrical)', order: 3, status: 'PENDING' },
+                { title: 'Finishing', order: 4, status: 'PENDING' },
+              ]
+            }
+          }
+        } : undefined
       },
       select: { id: true, name: true, email: true, role: true },
     })

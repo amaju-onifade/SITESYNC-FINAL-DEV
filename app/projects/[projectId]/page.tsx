@@ -4,8 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd'
-import { GripVertical, MapPin, AlertTriangle } from 'lucide-react'
-import { NavBar } from '@/components/NavBar'
+import { GripVertical } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/ui/StatusBadge'
@@ -218,25 +217,11 @@ export default function ProjectDetailPage() {
   }
 
   if (loading) {
-    return (
-      <div className={styles.page}>
-        <NavBar />
-        <main className={styles.main}>
-          <PageSkeleton />
-        </main>
-      </div>
-    )
+    return <PageSkeleton />
   }
 
   if (!project) {
-    return (
-      <div className={styles.page}>
-        <NavBar />
-        <main className={styles.main}>
-          <p>Project not found</p>
-        </main>
-      </div>
-    )
+    return <p>Project not found</p>
   }
 
   const isOwner = session?.user?.id === project.owner.id
@@ -252,10 +237,8 @@ export default function ProjectDetailPage() {
   }, null)
 
   return (
-    <div className={styles.page}>
-      <NavBar />
-      <main className={styles.main}>
-        <div className={styles.header}>
+    <>
+      <div className={styles.header}>
           <div>
             <h1 className={styles.title}>{project.name}</h1>
             <p className={styles.address}>{project.address}</p>
@@ -410,211 +393,7 @@ export default function ProjectDetailPage() {
           )}
         </div>
 
-        {/* Recent Activity */}
-        {((project.progressUpdates as any[])?.length > 0 || (activityNotifications as any[])?.length > 0) && (
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Recent Activity</h2>
-            <div className={styles.activityList}>
-              {(project.progressUpdates as any[])?.map((update) => (
-                <Card 
-                  key={update.id} 
-                  variant="outlined" 
-                  padding="sm" 
-                  className={styles.activityCard}
-                  onClick={() => router.push(`/projects/${projectId}/milestones/${update.milestoneId}`)}
-                >
-                  <div className={styles.activityHeader}>
-                    <span className={styles.activityMilestone}>
-                      {update.milestone?.title || 'Update'}
-                    </span>
-                    <span className={styles.activityDate}>
-                      {new Date(update.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div className={styles.activityMedia}>
-                    {update.rawMediaUrls?.slice(0, 4).map((url: string, i: number) => (
-                      <img key={i} src={url} alt="Capture" className={styles.activityThumb} />
-                    ))}
-                    {update.rawMediaUrls?.length > 4 && (
-                      <div className={styles.moreMedia}>+{update.rawMediaUrls.length - 4}</div>
-                    )}
-                  </div>
-                  {update.aiDescription && (
-                    <p className={styles.activitySummary}>{update.aiDescription}</p>
-                  )}
-                </Card>
-              ))}
-              {(activityNotifications as any[])?.map((n: any) => (
-                <Card
-                  key={n.id}
-                  variant="outlined"
-                  padding="sm"
-                  className={styles.activityCard}
-                >
-                  <div className={styles.activityHeader}>
-                    <span className={styles.activityMilestone}>Update Requested</span>
-                    <span className={styles.activityDate}>
-                      {new Date(n.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <p className={styles.activitySummary}>{n.message}</p>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
-        {isOwner && (
-          <>
-            {/* Supervisor Assignment */}
-            <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>Site Supervisor</h2>
-              <Card variant="outlined" padding="md">
-                {project.supervisor ? (
-                  <div className={styles.supervisorRow}>
-                    <div>
-                      <p className={styles.supervisorName}>
-                        {project.supervisor.name || project.supervisor.email}
-                      </p>
-                      <p className={styles.supervisorEmail}>{project.supervisor.email}</p>
-                    </div>
-                    <div className={styles.supervisorActions}>
-                      <Button
-                        size="sm"
-                        loading={requestLoading}
-                        onClick={handleRequestUpdate}
-                      >
-                        Request Update
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        loading={assignLoading}
-                        onClick={handleRemoveSupervisor}
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <p className={styles.emptyText}>No supervisor assigned yet.</p>
-                    <div className={styles.assignForm}>
-                      <input
-                        className={styles.emailInput}
-                        type="email"
-                        placeholder="supervisor@email.com"
-                        value={supervisorEmail}
-                        onChange={(e) => {
-                          setSupervisorEmail(e.target.value)
-                          setAssignError('')
-                          setAssignSuccess('')
-                        }}
-                        autoFocus
-                      />
-                      <Button
-                        size="sm"
-                        loading={assignLoading}
-                        disabled={!supervisorEmail.trim()}
-                        onClick={handleAssignSupervisor}
-                      >
-                        Assign
-                      </Button>
-                    </div>
-                  </>
-                )}
-                {assignError && <p className={styles.errorMsg}>{assignError}</p>}
-                {assignSuccess && <p className={styles.successMsg}>{assignSuccess}</p>}
-                {requestMsg && <p className={styles.successMsg}>{requestMsg}</p>}
-              </Card>
-            </div>
 
-            {/* Geofence Setup */}
-            <div className={`${styles.section} ${styles.geofenceSection}`}>
-              <h2 className={styles.sectionTitle}>Site Geofence</h2>
-              <Card variant="outlined" padding="md">
-                {geofenceSet ? (
-                  <>
-                    <div className={styles.geofenceStatus}>
-                      <span className={styles.geofenceActive}><MapPin size={14} /> Active</span>
-                      <span className={styles.emptyText}>
-                        Supervisors must capture within the defined boundary.
-                      </span>
-                    </div>
-                    <p className={styles.geofenceHint}>
-                      To update: enter new coordinates and radius below.
-                    </p>
-                  </>
-                ) : (
-                  <p className={styles.geofenceWarning}>
-                    <AlertTriangle size={16} /> No geofence set — location is not enforced. Set one to ensure captures happen on-site.
-                  </p>
-                )}
-
-                <div className={styles.geofenceForm}>
-                  <div className={styles.geofenceRow}>
-                    <input
-                      className={styles.geoInput}
-                      type="number"
-                      step="any"
-                      placeholder="Center latitude (e.g. 6.5244)"
-                      value={geofenceLat}
-                      onChange={(e) => setGeofenceLat(e.target.value)}
-                      autoFocus
-                    />
-                    <input
-                      className={styles.geoInput}
-                      type="number"
-                      step="any"
-                      placeholder="Center longitude (e.g. 3.3792)"
-                      value={geofenceLng}
-                      onChange={(e) => setGeofenceLng(e.target.value)}
-                    />
-                  </div>
-                  <input
-                    className={styles.geoInput}
-                    type="number"
-                    step="1"
-                    placeholder="Radius in meters (e.g. 200)"
-                    value={geofenceRadius}
-                    onChange={(e) => setGeofenceRadius(e.target.value)}
-                  />
-                  <Button
-                    fullWidth
-                    variant="outline"
-                    size="sm"
-                    loading={geofenceLoading}
-                    disabled={!geofenceLat || !geofenceLng || !geofenceRadius}
-                    onClick={handleSaveGeofence}
-                  >
-                    {geofenceSet ? 'Update Geofence' : 'Save Geofence'}
-                  </Button>
-                  {geofenceMsg && <p className={styles.successMsg}>{geofenceMsg}</p>}
-                </div>
-              </Card>
-            </div>
-          </>
-        )}
-
-        {/* Payment Records */}
-        {project.paymentRecords.length > 0 && (
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Payments</h2>
-            {project.paymentRecords.map((pr) => (
-              <Card key={pr.id} variant="outlined" padding="sm">
-                <div className={styles.paymentRow}>
-                  <div>
-                    <p className={styles.paymentMilestone}>
-                      {pr.paymentRequest?.milestone?.title || 'Milestone'}
-                    </p>
-                    <p className={styles.date}>{new Date(pr.paidAt).toLocaleDateString()}</p>
-                  </div>
-                  <p className={styles.paymentAmount}>₦{pr.paidAmountNgN.toLocaleString()}</p>
-                </div>
-              </Card>
-            ))}
-          </div>
-        )}
-      </main>
-    </div>
+      </>
   )
 }

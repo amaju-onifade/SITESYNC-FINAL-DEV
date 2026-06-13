@@ -139,13 +139,17 @@ export async function PATCH(
     return NextResponse.json({ error: 'No valid fields to update' }, { status: 400 })
   }
 
-  const updated = await prisma.project.update({
-    where: { id: projectId },
-    data: updateData,
-    include: {
-      supervisor: { select: { id: true, name: true, email: true } },
-    },
-  })
-
-  return NextResponse.json({ project: updated })
+  try {
+    const updated = await prisma.project.update({
+      where: { id: projectId },
+      data: updateData,
+      include: {
+        supervisor: { select: { id: true, name: true, email: true } },
+      },
+    })
+    return NextResponse.json({ project: updated })
+  } catch (error) {
+    console.error('Project update error:', error)
+    return NextResponse.json({ error: 'Failed to update project' }, { status: 500 })
+  }
 }

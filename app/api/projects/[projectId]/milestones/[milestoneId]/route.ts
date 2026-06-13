@@ -70,7 +70,11 @@ export async function DELETE(
     return NextResponse.json({ error: 'Milestone not found' }, { status: 404 })
   }
 
-  await prisma.milestone.delete({ where: { id: milestoneId } })
-
-  return NextResponse.json({ ok: true })
+  try {
+    await prisma.milestone.delete({ where: { id: milestoneId } })
+    return NextResponse.json({ ok: true })
+  } catch (error) {
+    console.error('Milestone delete error:', error)
+    return NextResponse.json({ error: 'Failed to delete milestone' }, { status: 500 })
+  }
 }

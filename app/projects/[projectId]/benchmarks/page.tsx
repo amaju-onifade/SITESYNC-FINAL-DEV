@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { NavBar } from '@/components/NavBar'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { BenchmarkUpload } from '@/components/BenchmarkUpload'
@@ -64,9 +63,7 @@ export default function BenchmarksPage() {
   }
 
   return (
-    <div className={styles.page}>
-      <NavBar />
-      <main className={styles.main}>
+    <>
         <h1 className={styles.title}>Benchmark Images & Plans</h1>
         <p className={styles.subtitle}>
           Upload architectural drawings or reference images for AI comparison.
@@ -112,7 +109,6 @@ export default function BenchmarksPage() {
             Back to Project
           </Button>
         </div>
-      </main>
-    </div>
+    </>
   )
 }

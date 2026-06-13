@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { NavBar } from '@/components/NavBar'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -100,9 +99,7 @@ export default function NewMilestonePage() {
   }
 
   return (
-    <div className={styles.page}>
-      <NavBar />
-      <main className={styles.main}>
+    <>
         <h1 className={styles.title}>New Milestone</h1>
 
         <Card padding="lg">
@@ -177,7 +174,6 @@ export default function NewMilestonePage() {
             Back to Project
           </Button>
         </div>
-      </main>
-    </div>
+    </>
   )
 }

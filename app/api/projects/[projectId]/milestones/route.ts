@@ -121,11 +121,14 @@ export async function PATCH(
     return NextResponse.json({ error: 'milestoneIds array required' }, { status: 400 })
   }
 
-  const updates = milestoneIds.map((id: string, index: number) =>
-    prisma.milestone.update({ where: { id }, data: { order: index } })
-  )
-
-  await prisma.$transaction(updates)
-
-  return NextResponse.json({ ok: true })
+  try {
+    const updates = milestoneIds.map((id: string, index: number) =>
+      prisma.milestone.update({ where: { id }, data: { order: index } })
+    )
+    await prisma.$transaction(updates)
+    return NextResponse.json({ ok: true })
+  } catch (error) {
+    console.error('Milestone reorder error:', error)
+    return NextResponse.json({ error: 'Failed to reorder milestones' }, { status: 500 })
+  }
 }

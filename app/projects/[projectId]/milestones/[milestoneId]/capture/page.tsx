@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { NavBar } from '@/components/NavBar'
 import { Camera } from '@/components/Camera'
 import { GhostOverlay } from '@/components/GhostOverlay'
 import { Button } from '@/components/ui/Button'
@@ -136,7 +135,8 @@ export default function CapturePage() {
           setTimeout(() => router.push(`/projects/${projectId}/milestones/${milestoneId}`), 2000)
           return
         }
-        throw new Error('Upload failed')
+        const errData = await res.json().catch(() => ({}))
+        throw new Error(errData.error || `Server error: ${res.status}`)
       }
 
       const data = await res.json()
@@ -150,22 +150,24 @@ export default function CapturePage() {
       setStatus('Capture uploaded! AI processing started.')
       setTimeout(() => router.push(`/projects/${projectId}/milestones/${milestoneId}`), 1500)
     } catch {
-      await queueCapture({
-        projectId,
-        milestoneId,
-        mediaBlob: capturedBlobs[0],
-        metadata,
-      })
-      setStatus('Saved offline. Will upload when connected.')
+      if (!navigator.onLine) {
+        await queueCapture({
+          projectId,
+          milestoneId,
+          mediaBlob: capturedBlobs[0],
+          metadata,
+        })
+        setStatus('Saved offline. Will upload when connected.')
+      } else {
+        setStatus('Upload failed. Please try again.')
+      }
     }
 
     setUploading(false)
   }
 
   return (
-    <div className={styles.page}>
-      <NavBar />
-      <main className={styles.main}>
+    <>
         <h1 className={styles.title}>Capture Progress</h1>
 
         <Camera onCapture={handleCapture} benchmarkUrl={selectedBenchmark || undefined} />
@@ -272,7 +274,6 @@ export default function CapturePage() {
             Back to Project
           </Button>
         </div>
-      </main>
-    </div>
+    </>
   )
 }

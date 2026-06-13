@@ -1,0 +1,47 @@
+.title {
+  font-size: var(--typography-headline-small-font-size);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card {
+  cursor: pointer;
+}
+
+.activityHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.activityMilestone {
+  font-size: var(--typography-body-medium-font-size);
+  font-weight: 600;
+}
+
+.activityDate {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+}
+
+.activitySummary {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.emptyText {
+  text-align: center;
+  color: var(--color-on-surface-variant);
+  padding: 24px 0;
+}

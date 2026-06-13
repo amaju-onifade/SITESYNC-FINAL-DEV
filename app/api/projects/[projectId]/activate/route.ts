@@ -35,15 +35,18 @@ export async function POST(
   }
 
   const user = await prisma.user.findUnique({ where: { id: session.user.id } })
+  if (!user?.email) {
+    return NextResponse.json({ error: 'User email not found' }, { status: 400 })
+  }
 
   const { createPaymentLink } = require('@/lib/flutterwave')
 
   try {
     const paymentLink = await createPaymentLink({
       amount: 50000,
-      email: user!.email!,
+      email: user.email,
       txRef: `activate_${projectId}_${Date.now()}`,
-      redirectUrl: `${process.env.AUTH_URL}/projects/${projectId}?payment=true`,
+      redirectUrl: `${process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}/projects/${projectId}?payment=true`,
     })
 
     return NextResponse.json({ paymentLink })

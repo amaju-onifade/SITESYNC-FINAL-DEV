@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { NavBar } from '@/components/NavBar'
 import { Card } from '@/components/ui/Card'
 import { PaymentReceipt } from '@/components/PaymentReceipt'
 import { Button } from '@/components/ui/Button'
@@ -68,9 +67,7 @@ export default function ReviewPage() {
   }
 
   return (
-    <div className={styles.page}>
-      <NavBar />
-      <main className={styles.main}>
+    <>
         <h1 className={styles.title}>Payment & Closure</h1>
         {milestoneTitle && (
           <p className={styles.subtitle}>
@@ -93,7 +90,6 @@ export default function ReviewPage() {
             Back to Project
           </Button>
         </div>
-      </main>
-    </div>
+    </>
   )
 }

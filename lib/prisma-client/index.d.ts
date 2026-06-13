@@ -2065,6 +2065,8 @@ export namespace Prisma {
     role: $Enums.UserRole | null
     emailVerified: Date | null
     image: string | null
+    resetToken: string | null
+    resetTokenExpiry: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2077,6 +2079,8 @@ export namespace Prisma {
     role: $Enums.UserRole | null
     emailVerified: Date | null
     image: string | null
+    resetToken: string | null
+    resetTokenExpiry: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2089,6 +2093,8 @@ export namespace Prisma {
     role: number
     emailVerified: number
     image: number
+    resetToken: number
+    resetTokenExpiry: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2103,6 +2109,8 @@ export namespace Prisma {
     role?: true
     emailVerified?: true
     image?: true
+    resetToken?: true
+    resetTokenExpiry?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2115,6 +2123,8 @@ export namespace Prisma {
     role?: true
     emailVerified?: true
     image?: true
+    resetToken?: true
+    resetTokenExpiry?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2127,6 +2137,8 @@ export namespace Prisma {
     role?: true
     emailVerified?: true
     image?: true
+    resetToken?: true
+    resetTokenExpiry?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2212,6 +2224,8 @@ export namespace Prisma {
     role: $Enums.UserRole
     emailVerified: Date | null
     image: string | null
+    resetToken: string | null
+    resetTokenExpiry: Date | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -2241,6 +2255,8 @@ export namespace Prisma {
     role?: boolean
     emailVerified?: boolean
     image?: boolean
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     ownedProjects?: boolean | User$ownedProjectsArgs<ExtArgs>
@@ -2260,6 +2276,8 @@ export namespace Prisma {
     role?: boolean
     emailVerified?: boolean
     image?: boolean
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -2272,6 +2290,8 @@ export namespace Prisma {
     role?: boolean
     emailVerified?: boolean
     image?: boolean
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -2284,11 +2304,13 @@ export namespace Prisma {
     role?: boolean
     emailVerified?: boolean
     image?: boolean
+    resetToken?: boolean
+    resetTokenExpiry?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "role" | "emailVerified" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "role" | "emailVerified" | "image" | "resetToken" | "resetTokenExpiry" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ownedProjects?: boolean | User$ownedProjectsArgs<ExtArgs>
     supervisedProjects?: boolean | User$supervisedProjectsArgs<ExtArgs>
@@ -2319,6 +2341,8 @@ export namespace Prisma {
       role: $Enums.UserRole
       emailVerified: Date | null
       image: string | null
+      resetToken: string | null
+      resetTokenExpiry: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -2757,6 +2781,8 @@ export namespace Prisma {
     readonly role: FieldRef<"User", 'UserRole'>
     readonly emailVerified: FieldRef<"User", 'DateTime'>
     readonly image: FieldRef<"User", 'String'>
+    readonly resetToken: FieldRef<"User", 'String'>
+    readonly resetTokenExpiry: FieldRef<"User", 'DateTime'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -14788,6 +14814,8 @@ export namespace Prisma {
     role: 'role',
     emailVerified: 'emailVerified',
     image: 'image',
+    resetToken: 'resetToken',
+    resetTokenExpiry: 'resetTokenExpiry',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -15150,6 +15178,8 @@ export namespace Prisma {
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
+    resetToken?: StringNullableFilter<"User"> | string | null
+    resetTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     ownedProjects?: ProjectListRelationFilter
@@ -15168,6 +15198,8 @@ export namespace Prisma {
     role?: SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    resetToken?: SortOrderInput | SortOrder
+    resetTokenExpiry?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     ownedProjects?: ProjectOrderByRelationAggregateInput
@@ -15181,6 +15213,7 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
+    resetToken?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -15189,6 +15222,7 @@ export namespace Prisma {
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
+    resetTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     ownedProjects?: ProjectListRelationFilter
@@ -15197,7 +15231,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
-  }, "id" | "email">
+  }, "id" | "email" | "resetToken">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15207,6 +15241,8 @@ export namespace Prisma {
     role?: SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    resetToken?: SortOrderInput | SortOrder
+    resetTokenExpiry?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -15225,6 +15261,8 @@ export namespace Prisma {
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
     emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
+    resetToken?: StringNullableWithAggregatesFilter<"User"> | string | null
+    resetTokenExpiry?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -16019,6 +16057,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectCreateNestedManyWithoutOwnerInput
@@ -16037,6 +16077,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectUncheckedCreateNestedManyWithoutOwnerInput
@@ -16055,6 +16097,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUpdateManyWithoutOwnerNestedInput
@@ -16073,6 +16117,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUncheckedUpdateManyWithoutOwnerNestedInput
@@ -16091,6 +16137,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16103,6 +16151,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16115,6 +16165,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17082,6 +17134,8 @@ export namespace Prisma {
     role?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiry?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17094,6 +17148,8 @@ export namespace Prisma {
     role?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiry?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17106,6 +17162,8 @@ export namespace Prisma {
     role?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpiry?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19412,6 +19470,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectCreateNestedManyWithoutOwnerInput
@@ -19429,6 +19489,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectUncheckedCreateNestedManyWithoutOwnerInput
@@ -19462,6 +19524,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUpdateManyWithoutOwnerNestedInput
@@ -19479,6 +19543,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUncheckedUpdateManyWithoutOwnerNestedInput
@@ -19496,6 +19562,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectCreateNestedManyWithoutOwnerInput
@@ -19513,6 +19581,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectUncheckedCreateNestedManyWithoutOwnerInput
@@ -19546,6 +19616,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUpdateManyWithoutOwnerNestedInput
@@ -19563,6 +19635,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUncheckedUpdateManyWithoutOwnerNestedInput
@@ -19580,6 +19654,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     supervisedProjects?: ProjectCreateNestedManyWithoutSupervisorInput
@@ -19597,6 +19673,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     supervisedProjects?: ProjectUncheckedCreateNestedManyWithoutSupervisorInput
@@ -19619,6 +19697,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectCreateNestedManyWithoutOwnerInput
@@ -19636,6 +19716,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectUncheckedCreateNestedManyWithoutOwnerInput
@@ -19821,6 +19903,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     supervisedProjects?: ProjectUpdateManyWithoutSupervisorNestedInput
@@ -19838,6 +19922,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     supervisedProjects?: ProjectUncheckedUpdateManyWithoutSupervisorNestedInput
@@ -19866,6 +19952,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUpdateManyWithoutOwnerNestedInput
@@ -19883,6 +19971,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUncheckedUpdateManyWithoutOwnerNestedInput
@@ -20355,6 +20445,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectCreateNestedManyWithoutOwnerInput
@@ -20372,6 +20464,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectUncheckedCreateNestedManyWithoutOwnerInput
@@ -20487,6 +20581,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUpdateManyWithoutOwnerNestedInput
@@ -20504,6 +20600,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUncheckedUpdateManyWithoutOwnerNestedInput
@@ -20521,6 +20619,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectCreateNestedManyWithoutOwnerInput
@@ -20538,6 +20638,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     emailVerified?: Date | string | null
     image?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     ownedProjects?: ProjectUncheckedCreateNestedManyWithoutOwnerInput
@@ -20571,6 +20673,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUpdateManyWithoutOwnerNestedInput
@@ -20588,6 +20692,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedProjects?: ProjectUncheckedUpdateManyWithoutOwnerNestedInput

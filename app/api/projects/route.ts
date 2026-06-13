@@ -16,16 +16,13 @@ export async function GET() {
       ],
     },
     include: {
+      owner: { select: { name: true, email: true } },
+      supervisor: { select: { name: true, email: true } },
       milestones: {
         orderBy: { order: 'asc' },
-        include: {
-          progressUpdates: {
-            where: { reviewStatus: 'PENDING_REVIEW' },
-            select: { id: true },
-          },
-        },
+        select: { id: true, title: true, status: true, updatedAt: true, order: true, progressUpdates: { take: 1, select: { createdAt: true } } },
       },
-      paymentRecords: { select: { paidAmountNgN: true } },
+      paymentRecords: { select: { paidAmountNgN: true, paidAt: true } },
       _count: { select: { progressUpdates: true } },
     },
     orderBy: { createdAt: 'desc' },
@@ -41,11 +38,18 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { name, address, geofence, supervisorEmail } = await req.json()
+    const { name, address, geofence, supervisorEmail, milestones } = await req.json()
 
     const supervisor = supervisorEmail
-      ? await prisma.user.findUnique({ where: { email: supervisorEmail } })
+      ? await prisma.user.findUnique({ where: { email: supervisorEmail }, select: { id: true, role: true } })
       : null
+
+    if (supervisor && supervisor.role !== 'SUPERVISOR') {
+      return NextResponse.json(
+        { error: 'That user is registered as an Owner, not a Supervisor. They need a Supervisor account.' },
+        { status: 400 }
+      )
+    }
 
     // Verify owner exists (handles stale sessions after DB reset)
     const owner = await prisma.user.findUnique({
@@ -63,6 +67,12 @@ export async function POST(req: Request) {
         geofence: geofence || null,
         ownerId: owner.id,
         supervisorId: supervisor?.id || null,
+        milestones: {
+          create: (milestones || []).map((m: any) => ({
+            title: m.title,
+            order: m.order,
+          })),
+        },
       },
     })
 

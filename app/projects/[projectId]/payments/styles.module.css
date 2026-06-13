@@ -1,0 +1,59 @@
+.title {
+  font-size: var(--typography-headline-small-font-size);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.totalCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.totalLabel {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface-variant);
+  font-weight: 500;
+}
+
+.totalValue {
+  font-size: var(--typography-title-large-font-size);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.paymentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.paymentMilestone {
+  font-size: var(--typography-body-medium-font-size);
+  font-weight: 500;
+}
+
+.date {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+  margin-top: 2px;
+}
+
+.paymentAmount {
+  font-size: var(--typography-title-medium-font-size);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.emptyText {
+  text-align: center;
+  color: var(--color-on-surface-variant);
+  padding: 24px 0;
+}

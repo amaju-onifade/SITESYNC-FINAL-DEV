@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { Bell, User } from 'lucide-react'
+import { useRouter, usePathname } from 'next/navigation'
+import { Bell, User, Search, LayoutDashboard, FolderOpen, FileText, CreditCard, Users, Settings } from 'lucide-react'
 import styles from './styles.module.css'
 
 type Notification = {
@@ -17,18 +17,29 @@ type Notification = {
   createdAt: string
 }
 
+const topLinks = [
+  { href: '/projects', label: 'Projects', icon: FolderOpen },
+  { href: '/reports', label: 'Reports', icon: FileText },
+  { href: '/payments', label: 'Payments', icon: CreditCard },
+  { href: '/notifications', label: 'Notifications', icon: Bell },
+]
+
 export function NavBar() {
   const { data: session } = useSession()
   const router = useRouter()
+  const pathname = usePathname()
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [notifOpen, setNotifOpen] = useState(false)
   const [userOpen, setUserOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const notifRef = useRef<HTMLDivElement>(null)
   const userRef = useRef<HTMLDivElement>(null)
+  const searchRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!session?.user) return
+    if (!session?.user?.id) return
 
     const fetchNotifications = async () => {
       try {
@@ -42,17 +53,19 @@ export function NavBar() {
     fetchNotifications()
     const interval = setInterval(fetchNotifications, 15_000)
     return () => clearInterval(interval)
-  }, [session])
+  }, [session?.user?.id])
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as Node
       if (
         notifRef.current && !notifRef.current.contains(target) &&
-        userRef.current && !userRef.current.contains(target)
+        userRef.current && !userRef.current.contains(target) &&
+        searchRef.current && !searchRef.current.contains(target)
       ) {
         setNotifOpen(false)
         setUserOpen(false)
+        setSearchOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClick)
@@ -83,22 +96,75 @@ export function NavBar() {
     if (n.link) router.push(n.link)
   }
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+      setSearchOpen(false)
+      setSearchQuery('')
+    }
+  }
+
   return (
     <nav className={styles.nav}>
       <div className={styles.inner}>
-        <Link href="/dashboard" className={styles.logo}>
-          SiteSync
-        </Link>
+        <div className={styles.left}>
+          <Link href="/dashboard" className={styles.logo}>
+            SiteSync
+          </Link>
+          {session?.user && (
+            <div className={styles.navLinks}>
+              {topLinks.map((link) => {
+                const Icon = link.icon
+                const projectMatch = pathname.match(/^\/projects\/([^\/]+)/)
+                const projectId = projectMatch?.[1]
+                const isPortfolioLink = link.href === '/dashboard' || link.href === '/team'
+                const href = projectId && !isPortfolioLink
+                  ? `/projects/${projectId}${link.href}`
+                  : link.href
+                const isActive = projectId && !isPortfolioLink
+                  ? pathname === href || pathname.startsWith(href + '/')
+                  : pathname === link.href || pathname.startsWith(link.href + '/')
+                return (
+                  <Link
+                    key={link.href}
+                    href={href}
+                    className={`${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+                  >
+                    <Icon size={18} />
+                    <span>{link.label}</span>
+                  </Link>
+                )
+              })}
+            </div>
+          )}
+        </div>
 
-        <div className={styles.links}>
+        <div className={styles.right}>
           {session?.user ? (
             <>
-              <Link href="/dashboard" className={styles.link}>
-                Dashboard
-              </Link>
+              <div className={styles.searchWrapper} ref={searchRef}>
+                <button className={styles.iconBtn} onClick={() => setSearchOpen(!searchOpen)}>
+                  <Search size={20} />
+                </button>
+                {searchOpen && (
+                  <div className={styles.searchDropdown}>
+                    <form onSubmit={handleSearch} className={styles.searchForm}>
+                      <input
+                        className={styles.searchInput}
+                        type="text"
+                        placeholder="Search projects, reports..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        autoFocus
+                      />
+                    </form>
+                  </div>
+                )}
+              </div>
 
               <div className={styles.notifWrapper} ref={notifRef}>
-                <button className={styles.notifBtn} onClick={() => { setNotifOpen(!notifOpen); setUserOpen(false) }}>
+                <button className={styles.iconBtn} onClick={() => { setNotifOpen(!notifOpen); setUserOpen(false); setSearchOpen(false) }}>
                   <Bell size={20} />
                   {unreadCount > 0 && <span className={styles.badge}>{unreadCount}</span>}
                 </button>
@@ -134,12 +200,15 @@ export function NavBar() {
               </div>
 
               <div className={styles.notifWrapper} ref={userRef}>
-                <button className={styles.userBtn} onClick={() => { setUserOpen(!userOpen); setNotifOpen(false) }}>
+                <button className={styles.iconBtn} onClick={() => { setUserOpen(!userOpen); setNotifOpen(false); setSearchOpen(false) }}>
                   <User size={20} />
                 </button>
                 {userOpen && (
                   <div className={styles.dropdown}>
                     <div className={styles.dropdownList}>
+                      <Link href="/settings" className={styles.notifItem} onClick={() => setUserOpen(false)}>
+                        Account Settings
+                      </Link>
                       <button className={styles.notifItem} onClick={() => signOut({ callbackUrl: '/login' })}>
                         Sign Out
                       </button>
@@ -149,14 +218,14 @@ export function NavBar() {
               </div>
             </>
           ) : (
-            <>
-              <Link href="/login" className={styles.link}>
+            <div className={styles.authLinks}>
+              <Link href="/login" className={styles.navLink}>
                 Sign In
               </Link>
-              <Link href="/register" className={styles.link}>
+              <Link href="/register" className={styles.navLink}>
                 Register
               </Link>
-            </>
+            </div>
           )}
         </div>
       </div>

@@ -1,0 +1,126 @@
+.title {
+  font-size: var(--typography-headline-small-font-size);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: var(--typography-title-medium-font-size);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.supervisorRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.supervisorActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.supervisorName {
+  font-size: var(--typography-body-large-font-size);
+  font-weight: 500;
+}
+
+.supervisorEmail {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+}
+
+.assignForm {
+  display: flex;
+  gap: 8px;
+}
+
+.emailInput {
+  flex: 1;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-outline);
+  border-radius: 8px;
+  font-size: var(--typography-body-medium-font-size);
+  outline: none;
+}
+
+.emailInput:focus {
+  border-color: var(--color-primary);
+}
+
+.emptyText {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface-variant);
+  margin-bottom: 12px;
+}
+
+.errorMsg {
+  color: var(--color-error);
+  font-size: var(--typography-body-small-font-size);
+  margin-top: 8px;
+}
+
+.successMsg {
+  color: var(--color-primary);
+  font-size: var(--typography-body-small-font-size);
+  margin-top: 8px;
+}
+
+.geofenceStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.geofenceActive {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: var(--typography-body-medium-font-size);
+}
+
+.geofenceWarning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-error);
+  margin-bottom: 12px;
+}
+
+.geofenceForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.geofenceRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.geoInput {
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-outline);
+  border-radius: 8px;
+  font-size: var(--typography-body-medium-font-size);
+  outline: none;
+  width: 100%;
+}
+
+.geoInput:focus {
+  border-color: var(--color-primary);
+}

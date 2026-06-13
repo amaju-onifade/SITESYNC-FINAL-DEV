@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { NavBar } from '@/components/NavBar'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { StatusBadge } from '@/components/ui/StatusBadge'
@@ -19,6 +18,7 @@ type MilestoneDetail = {
   order: number
   budgetNgN: number | null
   invoiceUrl: string | null
+  dueDate: string | null
   progressUpdates: any[]
   paymentRequests: any[]
   project: {
@@ -59,21 +59,15 @@ export default function MilestoneDetailPage() {
 
   if (loading) {
     return (
-      <div className={styles.page}>
-        <NavBar />
-        <main className={styles.main}>
-          <MilestoneDetailSkeleton />
-        </main>
-      </div>
+      <>
+        <MilestoneDetailSkeleton />
+      </>
     )
   }
 
   if (!milestone) {
     return (
-      <div className={styles.page}>
-        <NavBar />
-        <main className={styles.main}><p>Milestone not found</p></main>
-      </div>
+      <><p>Milestone not found</p></>
     )
   }
 
@@ -82,9 +76,7 @@ export default function MilestoneDetailPage() {
   const isSupervisor = session?.user?.role === 'SUPERVISOR'
 
   return (
-    <div className={styles.page}>
-      <NavBar />
-      <main className={styles.main}>
+    <>
         <div className={styles.header}>
           <div>
             <h1 className={styles.title}>{milestone.title}</h1>
@@ -315,7 +307,6 @@ export default function MilestoneDetailPage() {
             Back to Project
           </Button>
         </div>
-      </main>
-    </div>
+    </>
   )
 }

@@ -87,10 +87,21 @@ export default function AuthPage() {
     }
   }
 
+  const validatePassword = (pw: string) => {
+    if (!pw) return 'This field cannot be empty'
+    if (pw.length < 8) return 'Minimum 8 characters'
+    if (!/[A-Z]/.test(pw)) return 'Must contain an uppercase letter'
+    if (!/[a-z]/.test(pw)) return 'Must contain a lowercase letter'
+    if (!/[0-9]/.test(pw)) return 'Must contain a number'
+    if (!/[^A-Za-z0-9]/.test(pw)) return 'Must contain a special character'
+    return ''
+  }
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!password.trim()) {
-      setErrors({ password: 'This field cannot be empty' })
+    const pwError = validatePassword(password.trim())
+    if (pwError) {
+      setErrors({ password: pwError })
       return
     }
 
@@ -119,7 +130,7 @@ export default function AuthPage() {
       })
 
       if (result?.ok) {
-        router.push('/dashboard')
+        router.push(role === 'OWNER' ? '/onboarding' : '/dashboard')
       }
     } catch {
       setErrors({ form: 'Registration failed. Please try again.' })
@@ -129,6 +140,9 @@ export default function AuthPage() {
 
   return (
     <div className={styles.page}>
+      {errors.form && (
+        <div className={styles.snackbar}>{errors.form}</div>
+      )}
       <div className={styles.logo}>SiteSync</div>
       <Card padding="lg">
         {mode === 'login' ? (
@@ -140,6 +154,7 @@ export default function AuthPage() {
                   label="Email"
                   type="email"
                   value={email}
+                  onFocus={() => setErrors((prev) => { const { form, ...rest } = prev; return rest })}
                   onChange={(e) => {
                     const val = e.target.value
                     setEmail(val)
@@ -172,33 +187,34 @@ export default function AuthPage() {
                   required
                   autoFocus
                 />
-              <Input
-                label="Enter Password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => {
-                  const val = e.target.value
-                  setPassword(val)
-                  if (val.trim().length >= 8) {
-                    setPasswordDone(true)
-                  } else {
-                    setPasswordDone(false)
-                  }
+              <div className={styles.passwordField}>
+                <div className={styles.passwordLabelRow}>
+                  <label className={styles.passwordLabel}>Enter Password</label>
+                  <a href="/forgot-password" className={styles.forgotLink}>Forgot Password?</a>
+                </div>
+                <input
+                  className={`${styles.passwordInput} ${errors.password ? styles.passwordInputError : ''}`}
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onFocus={() => setErrors((prev) => { const { form, ...rest } = prev; return rest })}
+                  onChange={(e) => {
+                  setPassword(e.target.value)
+                  setPasswordDone(false)
                 }}
                 onBlur={() => {
                   if (!password.trim()) {
                     setErrors((prev) => ({ ...prev, password: 'This field cannot be empty' }))
                     setPasswordDone(false)
-                  } else if (password.trim().length >= 8) {
+                  } else {
                     setPasswordDone(true)
                   }
                 }}
                 style={passwordDone ? { backgroundColor: 'var(--color-inverse-on-surface)' } : {}}
-                error={errors.password}
                 required
               />
-              {errors.form && <p className={styles.error}>{errors.form}</p>}
+              {errors.password && <p className={styles.error}>{errors.password}</p>}
+            </div>
               <Button type="submit" fullWidth loading={loading}>
                 Sign In
               </Button>
@@ -291,39 +307,46 @@ export default function AuthPage() {
                 />
                 {errors.form && <p className={styles.error}>{errors.form}</p>}
                 <Button type="submit" fullWidth>
-                  Continue <ArrowRight size={16} style={{ marginLeft: '6px', verticalAlign: 'middle' }} />
+                  Continue <ArrowRight size={24} style={{ marginLeft: '6px', verticalAlign: 'middle' }} />
                 </Button>
               </form>
             ) : (
               <form onSubmit={handleRegister} className={styles.form} noValidate>
-                <Input
-                  label="Choose Password"
-                  type="password"
-                  placeholder="At least 8 characters"
-                  value={password}
-                  onChange={(e) => {
-                    const val = e.target.value
-                    setPassword(val)
-                    if (val.trim().length >= 8) {
-                      setPasswordDone(true)
-                    } else {
+                <div className={styles.passwordField}>
+                  <label className={styles.passwordLabel}>Choose Password</label>
+                  <input
+                    className={`${styles.passwordInput} ${errors.password ? styles.passwordInputError : ''}`}
+                    type="password"
+                    placeholder="At least 8 characters"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value)
                       setPasswordDone(false)
-                    }
-                  }}
-                  onBlur={() => {
-                    if (!password.trim()) {
-                      setErrors((prev) => ({ ...prev, password: 'This field cannot be empty' }))
-                      setPasswordDone(false)
-                    } else if (password.trim().length >= 8) {
-                      setPasswordDone(true)
-                    }
-                  }}
-                  style={passwordDone ? { backgroundColor: 'var(--color-inverse-on-surface)' } : {}}
-                  required
-                  minLength={8}
-                  autoFocus
-                  error={errors.password}
-                />
+                    }}
+                    onBlur={() => {
+                      const err = validatePassword(password.trim())
+                      if (err) {
+                        setErrors((prev) => ({ ...prev, password: err }))
+                        setPasswordDone(false)
+                      } else {
+                        setPasswordDone(true)
+                      }
+                    }}
+                    style={passwordDone ? { backgroundColor: 'var(--color-inverse-on-surface)' } : {}}
+                    required
+                    autoFocus
+                  />
+                  {errors.password && <p className={styles.errorMsg}>{errors.password}</p>}
+                  {password.length > 0 && (
+                    <div className={styles.requirements}>
+                      {!/[A-Z]/.test(password) && <span className={styles.req}>○ At least one uppercase letter</span>}
+                      {/[A-Z]/.test(password) && !/[a-z]/.test(password) && <span className={styles.req}>○ At least one lowercase letter</span>}
+                      {/[A-Z]/.test(password) && /[a-z]/.test(password) && !/[0-9]/.test(password) && <span className={styles.req}>○ At least one number</span>}
+                      {/[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password) && !/[^A-Za-z0-9]/.test(password) && <span className={styles.req}>○ At least one special character</span>}
+                      {/[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password) && password.length < 8 && <span className={styles.req}>○ At least 8 characters</span>}
+                    </div>
+                  )}
+                </div>
                 <div className={styles.roleGroup}>
                   <label className={styles.roleLabel}>Select your Role</label>
                   <div className={styles.roles}>
