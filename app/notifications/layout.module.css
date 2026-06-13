@@ -3,12 +3,8 @@
   background: var(--color-background);
 }
 
-.body {
-  display: flex;
-}
-
 .content {
-  flex: 1;
-  padding: 0;
-  min-width: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
 }

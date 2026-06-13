@@ -118,7 +118,7 @@ export function NavBar() {
                 const Icon = link.icon
                 const projectMatch = pathname.match(/^\/projects\/([^\/]+)/)
                 const projectId = projectMatch?.[1]
-                const isPortfolioLink = link.href === '/dashboard' || link.href === '/team'
+                const isPortfolioLink = link.href === '/dashboard' || link.href === '/team' || link.href === '/projects'
                 const href = projectId && !isPortfolioLink
                   ? `/projects/${projectId}${link.href}`
                   : link.href

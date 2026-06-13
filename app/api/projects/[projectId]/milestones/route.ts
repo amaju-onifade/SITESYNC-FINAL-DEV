@@ -19,13 +19,8 @@ export async function GET(
     include: {
       progressUpdates: {
         orderBy: { createdAt: 'desc' },
-        take: 1,
-        select: {
-          id: true,
-          processingStatus: true,
-          reviewStatus: true,
-          aiCompletionEstimate: true,
-          createdAt: true,
+        include: {
+          supervisor: { select: { name: true } },
         },
       },
     },

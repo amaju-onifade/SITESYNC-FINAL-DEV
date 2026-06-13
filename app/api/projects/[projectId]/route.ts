@@ -19,7 +19,15 @@ export async function GET(
       milestones: {
         orderBy: { order: 'asc' },
         include: {
-          progressUpdates: { orderBy: { createdAt: 'desc' }, take: 1, select: { createdAt: true } },
+          progressUpdates: {
+            orderBy: { createdAt: 'desc' },
+            take: 1,
+            select: {
+              createdAt: true,
+              aiCompletionEstimate: true,
+              reviewStatus: true,
+            },
+          },
         },
       },
       benchmarks: true,
