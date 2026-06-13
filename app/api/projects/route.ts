@@ -16,7 +16,16 @@ export async function GET() {
       ],
     },
     include: {
-      milestones: { orderBy: { order: 'asc' } },
+      milestones: {
+        orderBy: { order: 'asc' },
+        include: {
+          progressUpdates: {
+            where: { reviewStatus: 'PENDING_REVIEW' },
+            select: { id: true },
+          },
+        },
+      },
+      paymentRecords: { select: { paidAmountNgN: true } },
       _count: { select: { progressUpdates: true } },
     },
     orderBy: { createdAt: 'desc' },

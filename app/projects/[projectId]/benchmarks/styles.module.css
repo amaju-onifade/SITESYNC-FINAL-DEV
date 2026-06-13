@@ -29,10 +29,15 @@
   gap: 12px;
 }
 
+.sectionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .listTitle {
   font-size: var(--typography-title-medium-font-size);
   font-weight: 500;
-  margin-bottom: 12px;
 }
 
 .item {
@@ -56,6 +61,13 @@
 .itemTitle {
   font-size: var(--typography-body-medium-font-size);
   font-weight: 500;
+}
+
+.notes {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+  margin-top: 2px;
+  font-style: italic;
 }
 
 .date {

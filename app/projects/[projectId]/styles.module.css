@@ -53,6 +53,7 @@
   font-size: var(--typography-title-large-font-size);
   font-weight: 500;
   padding-top: 2px;
+  margin-bottom: 12px;
 }
 
 .milestoneList {
@@ -110,6 +111,12 @@
   text-overflow: ellipsis;
 }
 
+.dueDate {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
 .daysSince {
   font-size: var(--typography-body-small-font-size);
   color: var(--color-on-surface-variant);
@@ -139,6 +146,23 @@
   color: var(--color-on-surface-variant);
 }
 
+.paymentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.paymentMilestone {
+  font-size: var(--typography-body-medium-font-size);
+  font-weight: 500;
+}
+
+.paymentAmount {
+  font-size: var(--typography-title-medium-font-size);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
 .loading {
   min-height: 100vh;
   display: flex;
@@ -165,6 +189,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+}
+
+.supervisorActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .supervisorName {

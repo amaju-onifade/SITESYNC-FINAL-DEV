@@ -11,7 +11,9 @@ import styles from './styles.module.css'
 type Benchmark = {
   id: string
   title: string
+  notes: string | null
   mediaUrl: string
+  category: string
   createdAt: string
 }
 
@@ -41,10 +43,12 @@ export default function BenchmarksPage() {
     }
   }
 
-  const handleUpload = async (file: File) => {
+  const handleUpload = async (file: File, category: string, notes?: string) => {
     const formData = new FormData()
     formData.append('file', file)
     formData.append('title', file.name)
+    formData.append('category', category)
+    if (notes) formData.append('notes', notes)
 
     const res = await fetch(`/api/projects/${projectId}/benchmarks`, {
       method: 'POST',
@@ -63,7 +67,7 @@ export default function BenchmarksPage() {
     <div className={styles.page}>
       <NavBar />
       <main className={styles.main}>
-        <h1 className={styles.title}>Benchmark References</h1>
+        <h1 className={styles.title}>Benchmark Images & Plans</h1>
         <p className={styles.subtitle}>
           Upload architectural drawings or reference images for AI comparison.
         </p>
@@ -72,25 +76,34 @@ export default function BenchmarksPage() {
 
         {benchmarks.length > 0 && (
           <div className={styles.list}>
-            <h2 className={styles.listTitle}>
-              Uploaded Benchmarks ({benchmarks.length})
-            </h2>
-            {benchmarks.map((b) => (
-              <Card key={b.id} variant="outlined" padding="sm">
-                <div className={styles.item}>
-                  <img src={b.mediaUrl} alt={b.title} className={styles.thumb} />
-                  <div className={styles.itemInfo}>
-                    <p className={styles.itemTitle}>{b.title}</p>
-                    <p className={styles.date}>
-                      {new Date(b.createdAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <Button variant="ghost" size="sm" onClick={() => handleDelete(b.id)}>
-                    Delete
-                  </Button>
+            {['reference_photo', 'project_drawing'].map((cat) => {
+              const items = benchmarks.filter((b) => b.category === cat)
+              if (items.length === 0) return null
+              return (
+                <div key={cat} className={styles.sectionGroup}>
+                  <h2 className={styles.listTitle}>
+                    {cat === 'reference_photo' ? 'Reference Photos' : 'Project Drawings'} ({items.length})
+                  </h2>
+                  {items.map((b) => (
+                    <Card key={b.id} variant="outlined" padding="sm">
+                      <div className={styles.item}>
+                        <img src={b.mediaUrl} alt={b.title} className={styles.thumb} />
+                        <div className={styles.itemInfo}>
+                          <p className={styles.itemTitle}>{b.title}</p>
+                          {b.notes && <p className={styles.notes}>{b.notes}</p>}
+                          <p className={styles.date}>
+                            {new Date(b.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <Button variant="ghost" size="sm" onClick={() => handleDelete(b.id)}>
+                          Delete
+                        </Button>
+                      </div>
+                    </Card>
+                  ))}
                 </div>
-              </Card>
-            ))}
+              )
+            })}
           </div>
         )}
 

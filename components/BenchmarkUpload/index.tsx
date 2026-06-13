@@ -5,13 +5,15 @@ import { Button } from '@/components/ui/Button'
 import styles from './styles.module.css'
 
 type BenchmarkUploadProps = {
-  onUpload: (file: File) => Promise<void>
+  onUpload: (file: File, category: string, notes?: string) => Promise<void>
   existingUrls?: string[]
 }
 
 export function BenchmarkUpload({ onUpload, existingUrls = [] }: BenchmarkUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [category, setCategory] = useState('reference_photo')
+  const [notes, setNotes] = useState('')
   const [preview, setPreview] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState('')
@@ -35,9 +37,10 @@ export function BenchmarkUpload({ onUpload, existingUrls = [] }: BenchmarkUpload
     setUploading(true)
     setUploadError('')
     try {
-      await onUpload(selectedFile)
+      await onUpload(selectedFile, category, notes || undefined)
       setSelectedFile(null)
       setPreview(null)
+      setNotes('')
     } catch (e) {
       setUploadError(e instanceof Error ? e.message : 'Upload failed')
     } finally {
@@ -54,6 +57,35 @@ export function BenchmarkUpload({ onUpload, existingUrls = [] }: BenchmarkUpload
         onChange={handleFileSelect}
         style={{ display: 'none' }}
       />
+
+      {!selectedFile && (
+        <div className={styles.categoryRow}>
+          <button
+            type="button"
+            className={`${styles.categoryBtn} ${category === 'reference_photo' ? styles.categoryActive : ''}`}
+            onClick={() => setCategory('reference_photo')}
+          >
+            Reference Photo
+          </button>
+          <button
+            type="button"
+            className={`${styles.categoryBtn} ${category === 'project_drawing' ? styles.categoryActive : ''}`}
+            onClick={() => setCategory('project_drawing')}
+          >
+            Project Drawing
+          </button>
+        </div>
+      )}
+
+      {!selectedFile && (
+        <textarea
+          className={styles.notesInput}
+          placeholder="Notes (optional)"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          rows={2}
+        />
+      )}
 
       <div className={styles.dropzone} onClick={() => !selectedFile && inputRef.current?.click()}>
         {preview ? (

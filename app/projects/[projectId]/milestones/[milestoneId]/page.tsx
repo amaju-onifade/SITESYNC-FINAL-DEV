@@ -95,9 +95,15 @@ export default function MilestoneDetailPage() {
           <StatusBadge status={milestone.status} />
         </div>
 
-        {(milestone.budgetNgN || milestone.invoiceUrl) && (
+        {(milestone.budgetNgN || milestone.invoiceUrl || milestone.dueDate) && (
           <Card variant="outlined" padding="md" className={styles.budgetCard}>
             <div className={styles.budgetGrid}>
+              {milestone.dueDate && (
+                <div className={styles.budgetItem}>
+                  <span className={styles.budgetLabel}>Due Date</span>
+                  <span className={styles.budgetValue}>{new Date(milestone.dueDate).toLocaleDateString()}</span>
+                </div>
+              )}
               {milestone.budgetNgN && (
                 <div className={styles.budgetItem}>
                   <span className={styles.budgetLabel}>Budget</span>

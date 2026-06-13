@@ -30,6 +30,7 @@ interface ProjectDetail {
     id: string
     title: string
     description: string | null
+    dueDate: string | null
     status: string
     order: number
     progressUpdates: Array<{ createdAt: string }>
@@ -44,6 +45,7 @@ export default function ProjectDetailPage() {
   const { data: session } = useSession()
   const router = useRouter()
   const [project, setProject] = useState<ProjectDetail | null>(null)
+  const [activityNotifications, setActivityNotifications] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [activating, setActivating] = useState(false)
 
@@ -58,6 +60,8 @@ export default function ProjectDetailPage() {
   const [milestones, setMilestones] = useState<ProjectDetail['milestones']>([])
   const [geofenceLoading, setGeofenceLoading] = useState(false)
   const [geofenceMsg, setGeofenceMsg] = useState('')
+  const [requestLoading, setRequestLoading] = useState(false)
+  const [requestMsg, setRequestMsg] = useState('')
 
 
   const fetchProject = () => {
@@ -65,6 +69,7 @@ export default function ProjectDetailPage() {
       .then((res) => res.json())
       .then((data) => {
         setProject(data.project)
+        setActivityNotifications(data.activityNotifications || [])
         const ms = (data.project.milestones || []).slice()
         ms.sort((a: any, b: any) => a.order - b.order)
         setMilestones(ms)
@@ -154,6 +159,33 @@ export default function ProjectDetailPage() {
     setAssignLoading(false)
   }
 
+  const handleRequestUpdate = async () => {
+    if (!project?.supervisor?.id) return
+    setRequestLoading(true)
+    setRequestMsg('')
+    try {
+      const res = await fetch('/api/notifications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: project.supervisor.id,
+          type: 'update_request',
+          title: 'Update Requested',
+          message: `Owner requested a progress update for ${project.name}`,
+          link: `/projects/${projectId}`,
+        }),
+      })
+      if (res.ok) {
+        setRequestMsg('Update requested!')
+      } else {
+        setRequestMsg('Failed to send request')
+      }
+    } catch {
+      setRequestMsg('Failed to send request')
+    }
+    setRequestLoading(false)
+  }
+
   const handleSaveGeofence = async () => {
     if (!geofenceLat || !geofenceLng || !geofenceRadius) return
     setGeofenceLoading(true)
@@ -213,6 +245,11 @@ export default function ProjectDetailPage() {
   const completedMilestones = project.milestones.filter(m => m.status === 'APPROVED' || m.status === 'PAID').length
   const progressPercent = totalMilestones > 0 ? Math.round((completedMilestones / totalMilestones) * 100) : 0
   const totalPaid = project.paymentRecords.reduce((acc, pr) => acc + pr.paidAmountNgN, 0)
+  const lastReportDate = project.milestones.reduce((latest: string | null, m: any) => {
+    const update = m.progressUpdates?.[0]
+    if (!update) return latest
+    return !latest || new Date(update.createdAt) > new Date(latest) ? update.createdAt : latest
+  }, null)
 
   return (
     <div className={styles.page}>
@@ -242,9 +279,11 @@ export default function ProjectDetailPage() {
               <div className={styles.statValue}>₦{totalPaid.toLocaleString()}</div>
             </div>
             <div className={styles.statItem}>
-              <div className={styles.statLabel}>Status</div>
-              <div className={styles.statValue} style={{ fontSize: '14px', textTransform: 'capitalize' }}>
-                {project.status.toLowerCase().replace('_', ' ')}
+              <div className={styles.statLabel}>Last Report</div>
+              <div className={styles.statValue}>
+                {lastReportDate
+                  ? `${Math.floor((Date.now() - new Date(lastReportDate).getTime()) / (1000 * 60 * 60 * 24))}d ago`
+                  : 'No reports'}
               </div>
             </div>
           </div>
@@ -316,6 +355,9 @@ export default function ProjectDetailPage() {
                                   {ms.description && (
                                     <p className={styles.milestoneDesc}>{ms.description}</p>
                                   )}
+                                  {ms.dueDate && (
+                                    <p className={styles.dueDate}>Due: {new Date(ms.dueDate).toLocaleDateString()}</p>
+                                  )}
                                   <p className={styles.daysSince}>
                                     {ms.progressUpdates[0]
                                       ? `${Math.floor((Date.now() - new Date(ms.progressUpdates[0].createdAt).getTime()) / (1000 * 60 * 60 * 24))}d since last update`
@@ -340,7 +382,7 @@ export default function ProjectDetailPage() {
         {/* Benchmarks */}
         <div className={styles.section}>
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Benchmarks</h2>
+            <h2 className={styles.sectionTitle}>Benchmark Images & Plans</h2>
             {isOwner && (
               <Button
                 variant="outline"
@@ -369,11 +411,11 @@ export default function ProjectDetailPage() {
         </div>
 
         {/* Recent Activity */}
-        {project.progressUpdates && (project.progressUpdates as any[]).length > 0 && (
+        {((project.progressUpdates as any[])?.length > 0 || (activityNotifications as any[])?.length > 0) && (
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>Recent Activity</h2>
             <div className={styles.activityList}>
-              {(project.progressUpdates as any[]).map((update) => (
+              {(project.progressUpdates as any[])?.map((update) => (
                 <Card 
                   key={update.id} 
                   variant="outlined" 
@@ -402,6 +444,22 @@ export default function ProjectDetailPage() {
                   )}
                 </Card>
               ))}
+              {(activityNotifications as any[])?.map((n: any) => (
+                <Card
+                  key={n.id}
+                  variant="outlined"
+                  padding="sm"
+                  className={styles.activityCard}
+                >
+                  <div className={styles.activityHeader}>
+                    <span className={styles.activityMilestone}>Update Requested</span>
+                    <span className={styles.activityDate}>
+                      {new Date(n.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className={styles.activitySummary}>{n.message}</p>
+                </Card>
+              ))}
             </div>
           </div>
         )}
@@ -419,14 +477,23 @@ export default function ProjectDetailPage() {
                       </p>
                       <p className={styles.supervisorEmail}>{project.supervisor.email}</p>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      loading={assignLoading}
-                      onClick={handleRemoveSupervisor}
-                    >
-                      Remove
-                    </Button>
+                    <div className={styles.supervisorActions}>
+                      <Button
+                        size="sm"
+                        loading={requestLoading}
+                        onClick={handleRequestUpdate}
+                      >
+                        Request Update
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        loading={assignLoading}
+                        onClick={handleRemoveSupervisor}
+                      >
+                        Remove
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <>
@@ -457,6 +524,7 @@ export default function ProjectDetailPage() {
                 )}
                 {assignError && <p className={styles.errorMsg}>{assignError}</p>}
                 {assignSuccess && <p className={styles.successMsg}>{assignSuccess}</p>}
+                {requestMsg && <p className={styles.successMsg}>{requestMsg}</p>}
               </Card>
             </div>
 
@@ -530,11 +598,18 @@ export default function ProjectDetailPage() {
         {/* Payment Records */}
         {project.paymentRecords.length > 0 && (
           <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Payment Records</h2>
+            <h2 className={styles.sectionTitle}>Payments</h2>
             {project.paymentRecords.map((pr) => (
               <Card key={pr.id} variant="outlined" padding="sm">
-                <p>Paid: ₦{pr.paidAmountNgN.toLocaleString()}</p>
-                <p className={styles.date}>{new Date(pr.paidAt).toLocaleDateString()}</p>
+                <div className={styles.paymentRow}>
+                  <div>
+                    <p className={styles.paymentMilestone}>
+                      {pr.paymentRequest?.milestone?.title || 'Milestone'}
+                    </p>
+                    <p className={styles.date}>{new Date(pr.paidAt).toLocaleDateString()}</p>
+                  </div>
+                  <p className={styles.paymentAmount}>₦{pr.paidAmountNgN.toLocaleString()}</p>
+                </div>
               </Card>
             ))}
           </div>

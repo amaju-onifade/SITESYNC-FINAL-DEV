@@ -44,7 +44,7 @@ export async function POST(
   }
 
   const { projectId } = await params
-  const { title, description, order, budgetNgN, invoiceUrl } = await req.json()
+  const { title, description, order, budgetNgN, invoiceUrl, dueDate } = await req.json()
 
   const project = await prisma.project.findUnique({
     where: { id: projectId },
@@ -77,7 +77,8 @@ export async function POST(
         budgetNgN: budgetNgN !== null && budgetNgN !== undefined && budgetNgN !== '' 
           ? parseInt(String(budgetNgN), 10) 
           : null,
-        invoiceUrl: invoiceUrl || null
+        invoiceUrl: invoiceUrl || null,
+        dueDate: dueDate ? new Date(dueDate) : null
       },
     })
     return NextResponse.json({ milestone }, { status: 201 })

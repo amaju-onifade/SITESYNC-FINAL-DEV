@@ -39,6 +39,8 @@ export async function POST(
     const formData = await req.formData()
     const file = formData.get('file') as File
     const title = formData.get('title') as string || 'Benchmark'
+    const notes = formData.get('notes') as string || null
+    const category = formData.get('category') as string || 'reference_photo'
     const milestoneId = formData.get('milestoneId') as string || null
 
     if (!file) {
@@ -53,8 +55,10 @@ export async function POST(
         projectId,
         milestoneId,
         title,
+        notes,
         mediaUrl,
         mediaType: file.type.startsWith('image/') ? 'image' : 'pdf',
+        category,
       },
     })
 

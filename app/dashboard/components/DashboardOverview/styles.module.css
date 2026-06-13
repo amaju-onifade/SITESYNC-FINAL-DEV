@@ -54,7 +54,7 @@
 
 @media (min-width: 600px) {
   .statsGrid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -67,6 +67,7 @@
   border-radius: 12px;
   border: 1px solid var(--color-outline-variant);
   transition: transform var(--transition-fast), background var(--transition-fast);
+  min-height: 80px;
 }
 
 .statItem:hover {
@@ -96,6 +97,11 @@
 .tertiary {
   background: var(--color-tertiary-container);
   color: var(--color-tertiary);
+}
+
+.quaternary {
+  background: hsla(220, 100%, 50%, 0.1);
+  color: hsl(220, 100%, 35%);
 }
 
 .statContent {

@@ -139,15 +139,24 @@ export default function AuthPage() {
                 <Input
                   label="Email"
                   type="email"
-                  placeholder="you@example.com"
                   value={email}
                   onChange={(e) => {
                     const val = e.target.value
                     setEmail(val)
                     if (val.trim() && (!val.includes('@') || !val.includes('.'))) {
+                      setErrors((prev) => ({ ...prev, email: 'Enter A Valid Email Address' }))
                       setEmailDone(false)
                     } else if (val.trim().includes('@') && val.trim().includes('.')) {
+                      setErrors((prev) => {
+                        const { email, ...rest } = prev
+                        return rest
+                      })
                       setEmailDone(true)
+                    } else {
+                      setErrors((prev) => {
+                        const { email, ...rest } = prev
+                        return rest
+                      })
                     }
                   }}
                   onBlur={() => {
@@ -248,15 +257,24 @@ export default function AuthPage() {
                 <Input
                   label="Enter Email"
                   type="email"
-                  placeholder="you@example.com"
                   value={email}
                   onChange={(e) => {
                     const val = e.target.value
                     setEmail(val)
                     if (val.trim() && (!val.includes('@') || !val.includes('.'))) {
+                      setErrors((prev) => ({ ...prev, email: 'Enter A Valid Email Address' }))
                       setEmailDone(false)
                     } else if (val.trim().includes('@') && val.trim().includes('.')) {
+                      setErrors((prev) => {
+                        const { email, ...rest } = prev
+                        return rest
+                      })
                       setEmailDone(true)
+                    } else {
+                      setErrors((prev) => {
+                        const { email, ...rest } = prev
+                        return rest
+                      })
                     }
                   }}
                   onBlur={() => {

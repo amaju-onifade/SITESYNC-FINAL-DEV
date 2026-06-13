@@ -65,9 +65,10 @@ export default function DashboardPage() {
       <NavBar />
       <main className={styles.main}>
         <div className={styles.header}>
-          <h1 className={styles.title}>
-            {isSupervisor ? 'My Site' : 'Projects'}
-          </h1>
+          <div>
+            <h1 className={styles.title}>Dashboard Overview</h1>
+            <p className={styles.subtitle}>Consolidated snapshot of all your construction projects</p>
+          </div>
           {isOwner && (
             <Button onClick={() => router.push('/projects/new')}>
                 Create New Project
@@ -106,7 +107,9 @@ export default function DashboardPage() {
             </div>
           </Card>
         ) : (
-          <div className={styles.grid}>
+          <>
+            <h2 className={styles.sectionTitle}>My Projects</h2>
+            <div className={styles.grid}>
             {displayProjects.map((project) => (
               <Card
                 key={project.id}
@@ -131,6 +134,7 @@ export default function DashboardPage() {
               </Card>
             ))}
           </div>
+          </>
         )}
       </main>
     </div>

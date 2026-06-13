@@ -7780,6 +7780,7 @@ export namespace Prisma {
     projectId: string | null
     title: string | null
     description: string | null
+    dueDate: Date | null
     status: $Enums.MilestoneStatus | null
     order: number | null
     budgetNgN: number | null
@@ -7793,6 +7794,7 @@ export namespace Prisma {
     projectId: string | null
     title: string | null
     description: string | null
+    dueDate: Date | null
     status: $Enums.MilestoneStatus | null
     order: number | null
     budgetNgN: number | null
@@ -7806,6 +7808,7 @@ export namespace Prisma {
     projectId: number
     title: number
     description: number
+    dueDate: number
     status: number
     order: number
     budgetNgN: number
@@ -7831,6 +7834,7 @@ export namespace Prisma {
     projectId?: true
     title?: true
     description?: true
+    dueDate?: true
     status?: true
     order?: true
     budgetNgN?: true
@@ -7844,6 +7848,7 @@ export namespace Prisma {
     projectId?: true
     title?: true
     description?: true
+    dueDate?: true
     status?: true
     order?: true
     budgetNgN?: true
@@ -7857,6 +7862,7 @@ export namespace Prisma {
     projectId?: true
     title?: true
     description?: true
+    dueDate?: true
     status?: true
     order?: true
     budgetNgN?: true
@@ -7957,6 +7963,7 @@ export namespace Prisma {
     projectId: string
     title: string
     description: string | null
+    dueDate: Date | null
     status: $Enums.MilestoneStatus
     order: number
     budgetNgN: number | null
@@ -7989,6 +7996,7 @@ export namespace Prisma {
     projectId?: boolean
     title?: boolean
     description?: boolean
+    dueDate?: boolean
     status?: boolean
     order?: boolean
     budgetNgN?: boolean
@@ -8006,6 +8014,7 @@ export namespace Prisma {
     projectId?: boolean
     title?: boolean
     description?: boolean
+    dueDate?: boolean
     status?: boolean
     order?: boolean
     budgetNgN?: boolean
@@ -8020,6 +8029,7 @@ export namespace Prisma {
     projectId?: boolean
     title?: boolean
     description?: boolean
+    dueDate?: boolean
     status?: boolean
     order?: boolean
     budgetNgN?: boolean
@@ -8034,6 +8044,7 @@ export namespace Prisma {
     projectId?: boolean
     title?: boolean
     description?: boolean
+    dueDate?: boolean
     status?: boolean
     order?: boolean
     budgetNgN?: boolean
@@ -8042,7 +8053,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type MilestoneOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "title" | "description" | "status" | "order" | "budgetNgN" | "invoiceUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["milestone"]>
+  export type MilestoneOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "title" | "description" | "dueDate" | "status" | "order" | "budgetNgN" | "invoiceUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["milestone"]>
   export type MilestoneInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     progressUpdates?: boolean | Milestone$progressUpdatesArgs<ExtArgs>
@@ -8068,6 +8079,7 @@ export namespace Prisma {
       projectId: string
       title: string
       description: string | null
+      dueDate: Date | null
       status: $Enums.MilestoneStatus
       order: number
       budgetNgN: number | null
@@ -8504,6 +8516,7 @@ export namespace Prisma {
     readonly projectId: FieldRef<"Milestone", 'String'>
     readonly title: FieldRef<"Milestone", 'String'>
     readonly description: FieldRef<"Milestone", 'String'>
+    readonly dueDate: FieldRef<"Milestone", 'DateTime'>
     readonly status: FieldRef<"Milestone", 'MilestoneStatus'>
     readonly order: FieldRef<"Milestone", 'Int'>
     readonly budgetNgN: FieldRef<"Milestone", 'Int'>
@@ -8987,8 +9000,10 @@ export namespace Prisma {
     projectId: string | null
     milestoneId: string | null
     title: string | null
+    notes: string | null
     mediaUrl: string | null
     mediaType: string | null
+    category: string | null
     createdAt: Date | null
   }
 
@@ -8997,8 +9012,10 @@ export namespace Prisma {
     projectId: string | null
     milestoneId: string | null
     title: string | null
+    notes: string | null
     mediaUrl: string | null
     mediaType: string | null
+    category: string | null
     createdAt: Date | null
   }
 
@@ -9007,8 +9024,10 @@ export namespace Prisma {
     projectId: number
     milestoneId: number
     title: number
+    notes: number
     mediaUrl: number
     mediaType: number
+    category: number
     createdAt: number
     _all: number
   }
@@ -9019,8 +9038,10 @@ export namespace Prisma {
     projectId?: true
     milestoneId?: true
     title?: true
+    notes?: true
     mediaUrl?: true
     mediaType?: true
+    category?: true
     createdAt?: true
   }
 
@@ -9029,8 +9050,10 @@ export namespace Prisma {
     projectId?: true
     milestoneId?: true
     title?: true
+    notes?: true
     mediaUrl?: true
     mediaType?: true
+    category?: true
     createdAt?: true
   }
 
@@ -9039,8 +9062,10 @@ export namespace Prisma {
     projectId?: true
     milestoneId?: true
     title?: true
+    notes?: true
     mediaUrl?: true
     mediaType?: true
+    category?: true
     createdAt?: true
     _all?: true
   }
@@ -9122,8 +9147,10 @@ export namespace Prisma {
     projectId: string
     milestoneId: string | null
     title: string
+    notes: string | null
     mediaUrl: string
     mediaType: string
+    category: string
     createdAt: Date
     _count: BenchmarkCountAggregateOutputType | null
     _min: BenchmarkMinAggregateOutputType | null
@@ -9149,8 +9176,10 @@ export namespace Prisma {
     projectId?: boolean
     milestoneId?: boolean
     title?: boolean
+    notes?: boolean
     mediaUrl?: boolean
     mediaType?: boolean
+    category?: boolean
     createdAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["benchmark"]>
@@ -9160,8 +9189,10 @@ export namespace Prisma {
     projectId?: boolean
     milestoneId?: boolean
     title?: boolean
+    notes?: boolean
     mediaUrl?: boolean
     mediaType?: boolean
+    category?: boolean
     createdAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["benchmark"]>
@@ -9171,8 +9202,10 @@ export namespace Prisma {
     projectId?: boolean
     milestoneId?: boolean
     title?: boolean
+    notes?: boolean
     mediaUrl?: boolean
     mediaType?: boolean
+    category?: boolean
     createdAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["benchmark"]>
@@ -9182,12 +9215,14 @@ export namespace Prisma {
     projectId?: boolean
     milestoneId?: boolean
     title?: boolean
+    notes?: boolean
     mediaUrl?: boolean
     mediaType?: boolean
+    category?: boolean
     createdAt?: boolean
   }
 
-  export type BenchmarkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "milestoneId" | "title" | "mediaUrl" | "mediaType" | "createdAt", ExtArgs["result"]["benchmark"]>
+  export type BenchmarkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "milestoneId" | "title" | "notes" | "mediaUrl" | "mediaType" | "category" | "createdAt", ExtArgs["result"]["benchmark"]>
   export type BenchmarkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }
@@ -9208,8 +9243,10 @@ export namespace Prisma {
       projectId: string
       milestoneId: string | null
       title: string
+      notes: string | null
       mediaUrl: string
       mediaType: string
+      category: string
       createdAt: Date
     }, ExtArgs["result"]["benchmark"]>
     composites: {}
@@ -9639,8 +9676,10 @@ export namespace Prisma {
     readonly projectId: FieldRef<"Benchmark", 'String'>
     readonly milestoneId: FieldRef<"Benchmark", 'String'>
     readonly title: FieldRef<"Benchmark", 'String'>
+    readonly notes: FieldRef<"Benchmark", 'String'>
     readonly mediaUrl: FieldRef<"Benchmark", 'String'>
     readonly mediaType: FieldRef<"Benchmark", 'String'>
+    readonly category: FieldRef<"Benchmark", 'String'>
     readonly createdAt: FieldRef<"Benchmark", 'DateTime'>
   }
     
@@ -14813,6 +14852,7 @@ export namespace Prisma {
     projectId: 'projectId',
     title: 'title',
     description: 'description',
+    dueDate: 'dueDate',
     status: 'status',
     order: 'order',
     budgetNgN: 'budgetNgN',
@@ -14829,8 +14869,10 @@ export namespace Prisma {
     projectId: 'projectId',
     milestoneId: 'milestoneId',
     title: 'title',
+    notes: 'notes',
     mediaUrl: 'mediaUrl',
     mediaType: 'mediaType',
+    category: 'category',
     createdAt: 'createdAt'
   };
 
@@ -15471,6 +15513,7 @@ export namespace Prisma {
     projectId?: StringFilter<"Milestone"> | string
     title?: StringFilter<"Milestone"> | string
     description?: StringNullableFilter<"Milestone"> | string | null
+    dueDate?: DateTimeNullableFilter<"Milestone"> | Date | string | null
     status?: EnumMilestoneStatusFilter<"Milestone"> | $Enums.MilestoneStatus
     order?: IntFilter<"Milestone"> | number
     budgetNgN?: IntNullableFilter<"Milestone"> | number | null
@@ -15487,6 +15530,7 @@ export namespace Prisma {
     projectId?: SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
+    dueDate?: SortOrderInput | SortOrder
     status?: SortOrder
     order?: SortOrder
     budgetNgN?: SortOrderInput | SortOrder
@@ -15506,6 +15550,7 @@ export namespace Prisma {
     projectId?: StringFilter<"Milestone"> | string
     title?: StringFilter<"Milestone"> | string
     description?: StringNullableFilter<"Milestone"> | string | null
+    dueDate?: DateTimeNullableFilter<"Milestone"> | Date | string | null
     status?: EnumMilestoneStatusFilter<"Milestone"> | $Enums.MilestoneStatus
     order?: IntFilter<"Milestone"> | number
     budgetNgN?: IntNullableFilter<"Milestone"> | number | null
@@ -15522,6 +15567,7 @@ export namespace Prisma {
     projectId?: SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
+    dueDate?: SortOrderInput | SortOrder
     status?: SortOrder
     order?: SortOrder
     budgetNgN?: SortOrderInput | SortOrder
@@ -15543,6 +15589,7 @@ export namespace Prisma {
     projectId?: StringWithAggregatesFilter<"Milestone"> | string
     title?: StringWithAggregatesFilter<"Milestone"> | string
     description?: StringNullableWithAggregatesFilter<"Milestone"> | string | null
+    dueDate?: DateTimeNullableWithAggregatesFilter<"Milestone"> | Date | string | null
     status?: EnumMilestoneStatusWithAggregatesFilter<"Milestone"> | $Enums.MilestoneStatus
     order?: IntWithAggregatesFilter<"Milestone"> | number
     budgetNgN?: IntNullableWithAggregatesFilter<"Milestone"> | number | null
@@ -15559,8 +15606,10 @@ export namespace Prisma {
     projectId?: StringFilter<"Benchmark"> | string
     milestoneId?: StringNullableFilter<"Benchmark"> | string | null
     title?: StringFilter<"Benchmark"> | string
+    notes?: StringNullableFilter<"Benchmark"> | string | null
     mediaUrl?: StringFilter<"Benchmark"> | string
     mediaType?: StringFilter<"Benchmark"> | string
+    category?: StringFilter<"Benchmark"> | string
     createdAt?: DateTimeFilter<"Benchmark"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
   }
@@ -15570,8 +15619,10 @@ export namespace Prisma {
     projectId?: SortOrder
     milestoneId?: SortOrderInput | SortOrder
     title?: SortOrder
+    notes?: SortOrderInput | SortOrder
     mediaUrl?: SortOrder
     mediaType?: SortOrder
+    category?: SortOrder
     createdAt?: SortOrder
     project?: ProjectOrderByWithRelationInput
   }
@@ -15584,8 +15635,10 @@ export namespace Prisma {
     projectId?: StringFilter<"Benchmark"> | string
     milestoneId?: StringNullableFilter<"Benchmark"> | string | null
     title?: StringFilter<"Benchmark"> | string
+    notes?: StringNullableFilter<"Benchmark"> | string | null
     mediaUrl?: StringFilter<"Benchmark"> | string
     mediaType?: StringFilter<"Benchmark"> | string
+    category?: StringFilter<"Benchmark"> | string
     createdAt?: DateTimeFilter<"Benchmark"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
   }, "id">
@@ -15595,8 +15648,10 @@ export namespace Prisma {
     projectId?: SortOrder
     milestoneId?: SortOrderInput | SortOrder
     title?: SortOrder
+    notes?: SortOrderInput | SortOrder
     mediaUrl?: SortOrder
     mediaType?: SortOrder
+    category?: SortOrder
     createdAt?: SortOrder
     _count?: BenchmarkCountOrderByAggregateInput
     _max?: BenchmarkMaxOrderByAggregateInput
@@ -15611,8 +15666,10 @@ export namespace Prisma {
     projectId?: StringWithAggregatesFilter<"Benchmark"> | string
     milestoneId?: StringNullableWithAggregatesFilter<"Benchmark"> | string | null
     title?: StringWithAggregatesFilter<"Benchmark"> | string
+    notes?: StringNullableWithAggregatesFilter<"Benchmark"> | string | null
     mediaUrl?: StringWithAggregatesFilter<"Benchmark"> | string
     mediaType?: StringWithAggregatesFilter<"Benchmark"> | string
+    category?: StringWithAggregatesFilter<"Benchmark"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Benchmark"> | Date | string
   }
 
@@ -16358,6 +16415,7 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    dueDate?: Date | string | null
     status?: $Enums.MilestoneStatus
     order?: number
     budgetNgN?: number | null
@@ -16374,6 +16432,7 @@ export namespace Prisma {
     projectId: string
     title: string
     description?: string | null
+    dueDate?: Date | string | null
     status?: $Enums.MilestoneStatus
     order?: number
     budgetNgN?: number | null
@@ -16388,6 +16447,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
     order?: IntFieldUpdateOperationsInput | number
     budgetNgN?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16404,6 +16464,7 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
     order?: IntFieldUpdateOperationsInput | number
     budgetNgN?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16419,6 +16480,7 @@ export namespace Prisma {
     projectId: string
     title: string
     description?: string | null
+    dueDate?: Date | string | null
     status?: $Enums.MilestoneStatus
     order?: number
     budgetNgN?: number | null
@@ -16431,6 +16493,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
     order?: IntFieldUpdateOperationsInput | number
     budgetNgN?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16444,6 +16507,7 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
     order?: IntFieldUpdateOperationsInput | number
     budgetNgN?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16456,8 +16520,10 @@ export namespace Prisma {
     id?: string
     milestoneId?: string | null
     title?: string
+    notes?: string | null
     mediaUrl: string
     mediaType?: string
+    category?: string
     createdAt?: Date | string
     project: ProjectCreateNestedOneWithoutBenchmarksInput
   }
@@ -16467,8 +16533,10 @@ export namespace Prisma {
     projectId: string
     milestoneId?: string | null
     title?: string
+    notes?: string | null
     mediaUrl: string
     mediaType?: string
+    category?: string
     createdAt?: Date | string
   }
 
@@ -16476,8 +16544,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     milestoneId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     mediaUrl?: StringFieldUpdateOperationsInput | string
     mediaType?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutBenchmarksNestedInput
   }
@@ -16487,8 +16557,10 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     milestoneId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     mediaUrl?: StringFieldUpdateOperationsInput | string
     mediaType?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -16497,8 +16569,10 @@ export namespace Prisma {
     projectId: string
     milestoneId?: string | null
     title?: string
+    notes?: string | null
     mediaUrl: string
     mediaType?: string
+    category?: string
     createdAt?: Date | string
   }
 
@@ -16506,8 +16580,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     milestoneId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     mediaUrl?: StringFieldUpdateOperationsInput | string
     mediaType?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -16516,8 +16592,10 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     milestoneId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     mediaUrl?: StringFieldUpdateOperationsInput | string
     mediaType?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -17413,6 +17491,7 @@ export namespace Prisma {
     projectId?: SortOrder
     title?: SortOrder
     description?: SortOrder
+    dueDate?: SortOrder
     status?: SortOrder
     order?: SortOrder
     budgetNgN?: SortOrder
@@ -17431,6 +17510,7 @@ export namespace Prisma {
     projectId?: SortOrder
     title?: SortOrder
     description?: SortOrder
+    dueDate?: SortOrder
     status?: SortOrder
     order?: SortOrder
     budgetNgN?: SortOrder
@@ -17444,6 +17524,7 @@ export namespace Prisma {
     projectId?: SortOrder
     title?: SortOrder
     description?: SortOrder
+    dueDate?: SortOrder
     status?: SortOrder
     order?: SortOrder
     budgetNgN?: SortOrder
@@ -17488,8 +17569,10 @@ export namespace Prisma {
     projectId?: SortOrder
     milestoneId?: SortOrder
     title?: SortOrder
+    notes?: SortOrder
     mediaUrl?: SortOrder
     mediaType?: SortOrder
+    category?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -17498,8 +17581,10 @@ export namespace Prisma {
     projectId?: SortOrder
     milestoneId?: SortOrder
     title?: SortOrder
+    notes?: SortOrder
     mediaUrl?: SortOrder
     mediaType?: SortOrder
+    category?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -17508,8 +17593,10 @@ export namespace Prisma {
     projectId?: SortOrder
     milestoneId?: SortOrder
     title?: SortOrder
+    notes?: SortOrder
     mediaUrl?: SortOrder
     mediaType?: SortOrder
+    category?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -19567,6 +19654,7 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    dueDate?: Date | string | null
     status?: $Enums.MilestoneStatus
     order?: number
     budgetNgN?: number | null
@@ -19581,6 +19669,7 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    dueDate?: Date | string | null
     status?: $Enums.MilestoneStatus
     order?: number
     budgetNgN?: number | null
@@ -19605,8 +19694,10 @@ export namespace Prisma {
     id?: string
     milestoneId?: string | null
     title?: string
+    notes?: string | null
     mediaUrl: string
     mediaType?: string
+    category?: string
     createdAt?: Date | string
   }
 
@@ -19614,8 +19705,10 @@ export namespace Prisma {
     id?: string
     milestoneId?: string | null
     title?: string
+    notes?: string | null
     mediaUrl: string
     mediaType?: string
+    category?: string
     createdAt?: Date | string
   }
 
@@ -19823,6 +19916,7 @@ export namespace Prisma {
     projectId?: StringFilter<"Milestone"> | string
     title?: StringFilter<"Milestone"> | string
     description?: StringNullableFilter<"Milestone"> | string | null
+    dueDate?: DateTimeNullableFilter<"Milestone"> | Date | string | null
     status?: EnumMilestoneStatusFilter<"Milestone"> | $Enums.MilestoneStatus
     order?: IntFilter<"Milestone"> | number
     budgetNgN?: IntNullableFilter<"Milestone"> | number | null
@@ -19855,8 +19949,10 @@ export namespace Prisma {
     projectId?: StringFilter<"Benchmark"> | string
     milestoneId?: StringNullableFilter<"Benchmark"> | string | null
     title?: StringFilter<"Benchmark"> | string
+    notes?: StringNullableFilter<"Benchmark"> | string | null
     mediaUrl?: StringFilter<"Benchmark"> | string
     mediaType?: StringFilter<"Benchmark"> | string
+    category?: StringFilter<"Benchmark"> | string
     createdAt?: DateTimeFilter<"Benchmark"> | Date | string
   }
 
@@ -20220,6 +20316,7 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    dueDate?: Date | string | null
     status?: $Enums.MilestoneStatus
     order?: number
     budgetNgN?: number | null
@@ -20235,6 +20332,7 @@ export namespace Prisma {
     projectId: string
     title: string
     description?: string | null
+    dueDate?: Date | string | null
     status?: $Enums.MilestoneStatus
     order?: number
     budgetNgN?: number | null
@@ -20344,6 +20442,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
     order?: IntFieldUpdateOperationsInput | number
     budgetNgN?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20359,6 +20458,7 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
     order?: IntFieldUpdateOperationsInput | number
     budgetNgN?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20501,6 +20601,7 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    dueDate?: Date | string | null
     status?: $Enums.MilestoneStatus
     order?: number
     budgetNgN?: number | null
@@ -20516,6 +20617,7 @@ export namespace Prisma {
     projectId: string
     title: string
     description?: string | null
+    dueDate?: Date | string | null
     status?: $Enums.MilestoneStatus
     order?: number
     budgetNgN?: number | null
@@ -20573,6 +20675,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
     order?: IntFieldUpdateOperationsInput | number
     budgetNgN?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20588,6 +20691,7 @@ export namespace Prisma {
     projectId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
     order?: IntFieldUpdateOperationsInput | number
     budgetNgN?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21053,6 +21157,7 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    dueDate?: Date | string | null
     status?: $Enums.MilestoneStatus
     order?: number
     budgetNgN?: number | null
@@ -21065,8 +21170,10 @@ export namespace Prisma {
     id?: string
     milestoneId?: string | null
     title?: string
+    notes?: string | null
     mediaUrl: string
     mediaType?: string
+    category?: string
     createdAt?: Date | string
   }
 
@@ -21104,6 +21211,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
     order?: IntFieldUpdateOperationsInput | number
     budgetNgN?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21118,6 +21226,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
     order?: IntFieldUpdateOperationsInput | number
     budgetNgN?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21132,6 +21241,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumMilestoneStatusFieldUpdateOperationsInput | $Enums.MilestoneStatus
     order?: IntFieldUpdateOperationsInput | number
     budgetNgN?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21144,8 +21254,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     milestoneId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     mediaUrl?: StringFieldUpdateOperationsInput | string
     mediaType?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -21153,8 +21265,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     milestoneId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     mediaUrl?: StringFieldUpdateOperationsInput | string
     mediaType?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -21162,8 +21276,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     milestoneId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     mediaUrl?: StringFieldUpdateOperationsInput | string
     mediaType?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

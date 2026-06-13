@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/Card'
 import styles from './styles.module.css'
-import { LayoutGrid, CheckCircle2, History } from 'lucide-react'
+import { LayoutGrid, Clock, History, CreditCard } from 'lucide-react'
 
 interface DashboardOverviewProps {
   projects: any[]
@@ -9,21 +9,25 @@ interface DashboardOverviewProps {
 
 export function DashboardOverview({ projects, isSupervisor }: DashboardOverviewProps) {
   const totalProjects = projects.length
-  const activeProjects = projects.filter(p => p.status === 'ACTIVE').length
-  const totalUpdates = projects.reduce((acc, p) => acc + (p._count?.progressUpdates || 0), 0)
+  const totalMilestones = projects.reduce((acc, p) => acc + (p.milestones?.length || 0), 0)
+  const completedMilestones = projects.reduce((acc, p) => {
+    const milestones = p.milestones || []
+    return acc + milestones.filter((m: any) => m.status === 'APPROVED' || m.status === 'PAID').length
+  }, 0)
+
+  const pendingApprovals = projects.reduce((acc, p) => {
+    const milestones = p.milestones || []
+    return acc + milestones.reduce((mAcc, m) => mAcc + (m.progressUpdates?.length || 0), 0)
+  }, 0)
+
+  const totalPaid = projects.reduce((acc, p) => {
+    const records = p.paymentRecords || []
+    return acc + records.reduce((rAcc, r) => rAcc + (r.paidAmountNgN || 0), 0)
+  }, 0)
 
   return (
     <Card variant="elevated" padding="lg" className={styles.overviewCard}>
       <div className={styles.container}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>Dashboard Overview</h2>
-          <p className={styles.subtitle}>
-            {isSupervisor 
-              ? "Your active site assignments and progress" 
-              : "Consolidated snapshot of all your construction projects"}
-          </p>
-        </div>
-
         <div className={styles.statsGrid}>
           <div className={styles.statItem}>
             <div className={`${styles.iconWrapper} ${styles.primary}`}>
@@ -36,12 +40,22 @@ export function DashboardOverview({ projects, isSupervisor }: DashboardOverviewP
           </div>
 
           <div className={styles.statItem}>
-            <div className={`${styles.iconWrapper} ${styles.secondary}`}>
-              <CheckCircle2 size={20} />
+            <div className={`${styles.iconWrapper} ${styles.quaternary}`}>
+              <CreditCard size={20} />
             </div>
             <div className={styles.statContent}>
-              <span className={styles.statLabel}>Active Sites</span>
-              <span className={styles.statValue}>{activeProjects}</span>
+              <span className={styles.statLabel}>Total Amount Paid</span>
+              <span className={styles.statValue}>₦{totalPaid.toLocaleString()}</span>
+            </div>
+          </div>
+
+          <div className={styles.statItem}>
+            <div className={`${styles.iconWrapper} ${styles.secondary}`}>
+              <Clock size={20} />
+            </div>
+            <div className={styles.statContent}>
+              <span className={styles.statLabel}>Pending Approvals</span>
+              <span className={styles.statValue}>{pendingApprovals}</span>
             </div>
           </div>
 
@@ -50,8 +64,8 @@ export function DashboardOverview({ projects, isSupervisor }: DashboardOverviewP
               <History size={20} />
             </div>
             <div className={styles.statContent}>
-              <span className={styles.statLabel}>Total Updates</span>
-              <span className={styles.statValue}>{totalUpdates}</span>
+              <span className={styles.statLabel}>Milestones Completed</span>
+              <span className={styles.statValue}>{completedMilestones}/{totalMilestones}</span>
             </div>
           </div>
         </div>

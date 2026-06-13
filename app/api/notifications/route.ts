@@ -21,6 +21,25 @@ export async function GET() {
   return NextResponse.json({ notifications, unreadCount })
 }
 
+export async function POST(req: Request) {
+  const session = await auth()
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const { userId, type, title, message, link } = await req.json()
+
+  if (!userId || !type || !title || !message) {
+    return NextResponse.json({ error: 'userId, type, title, message required' }, { status: 400 })
+  }
+
+  const notification = await prisma.notification.create({
+    data: { userId, type, title, message, link },
+  })
+
+  return NextResponse.json({ notification }, { status: 201 })
+}
+
 export async function PATCH(req: Request) {
   const session = await auth()
   if (!session?.user?.id) {

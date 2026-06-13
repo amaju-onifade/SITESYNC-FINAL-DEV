@@ -19,6 +19,18 @@
 .title {
   font-size: var(--typography-headline-small-font-size);
   font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface-variant);
+}
+
+.sectionTitle {
+  font-size: var(--typography-title-medium-font-size);
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
 .grid {

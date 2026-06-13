@@ -30,7 +30,14 @@ export async function GET(
         take: 10,
         include: { milestone: { select: { title: true } } },
       },
-      paymentRecords: { orderBy: { paidAt: 'desc' } },
+      paymentRecords: {
+        orderBy: { paidAt: 'desc' },
+        include: {
+          paymentRequest: {
+            include: { milestone: { select: { title: true } } },
+          },
+        },
+      },
     },
   })
 
@@ -45,7 +52,23 @@ export async function GET(
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  return NextResponse.json({ project })
+  const activityNotifications = await prisma.notification.findMany({
+    where: {
+      type: 'update_request',
+      link: { contains: projectId },
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 10,
+    select: {
+      id: true,
+      type: true,
+      title: true,
+      message: true,
+      createdAt: true,
+    },
+  })
+
+  return NextResponse.json({ project, activityNotifications })
 }
 
 export async function PATCH(

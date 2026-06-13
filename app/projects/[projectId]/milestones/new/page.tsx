@@ -28,6 +28,7 @@ export default function NewMilestonePage() {
   const [description, setDescription] = useState('')
   const [presetIndex, setPresetIndex] = useState<number | null>(null)
   const [budget, setBudget] = useState('')
+  const [dueDate, setDueDate] = useState('')
   const [invoiceFile, setInvoiceFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -76,6 +77,7 @@ export default function NewMilestonePage() {
           title,
           description,
           budgetNgN: budget || null,
+          dueDate: dueDate || null,
           invoiceUrl: invoiceUrl || null,
           ...(presetIndex !== null ? { order: presetIndex } : {}),
         }),
@@ -142,6 +144,12 @@ export default function NewMilestonePage() {
                 placeholder="e.g. 500000"
                 value={budget}
                 onChange={(e) => setBudget(e.target.value)}
+              />
+              <Input
+                label="Due Date (Optional)"
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
               />
             </div>
 
