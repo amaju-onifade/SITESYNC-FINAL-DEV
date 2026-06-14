@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { MapPin, AlertTriangle } from 'lucide-react'
+import { MapPin, AlertTriangle, Calendar, Building2, Trash2, UserPlus, Shield } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import styles from './styles.module.css'
@@ -15,201 +15,235 @@ export default function SettingsPage() {
   const [project, setProject] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
+  // Project Info State
+  const [projectName, setProjectName] = useState('')
+  const [location, setLocation] = useState('')
+  const [targetCompletion, setTargetCompletion] = useState('')
+  const [infoLoading, setInfoLoading] = useState(false)
+
+  // Supervisor State
   const [supervisorEmail, setSupervisorEmail] = useState('')
   const [assignLoading, setAssignLoading] = useState(false)
-  const [assignError, setAssignError] = useState('')
-  const [assignSuccess, setAssignSuccess] = useState('')
-
+  
+  // Geofence State
   const [geofenceLat, setGeofenceLat] = useState('')
   const [geofenceLng, setGeofenceLng] = useState('')
   const [geofenceRadius, setGeofenceRadius] = useState('')
   const [geofenceLoading, setGeofenceLoading] = useState(false)
-  const [geofenceMsg, setGeofenceMsg] = useState('')
-  const [requestLoading, setRequestLoading] = useState(false)
-  const [requestMsg, setRequestMsg] = useState('')
 
-  const fetchProject = () => {
-    fetch(`/api/projects/${projectId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProject(data.project)
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
+  const fetchProject = async () => {
+    try {
+      const res = await fetch(`/api/projects/${projectId}`)
+      const data = await res.json()
+      const p = data.project
+      setProject(p)
+      setProjectName(p.name || '')
+      setLocation(p.address || '')
+      setTargetCompletion(p.updatedAt ? new Date(p.updatedAt).toISOString().split('T')[0] : '') // Fallback or add to model
+      
+      if (p.geofence?.center) {
+        setGeofenceLat(p.geofence.center.lat.toString())
+        setGeofenceLng(p.geofence.center.lng.toString())
+        setGeofenceRadius(p.geofence.radiusM.toString())
+      }
+      
+      setLoading(false)
+    } catch (err) {
+      console.error(err)
+      setLoading(false)
+    }
   }
 
   useEffect(() => { fetchProject() }, [projectId])
 
+  const handleUpdateInfo = async () => {
+    setInfoLoading(true)
+    await fetch(`/api/projects/${projectId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: projectName, address: location }),
+    })
+    setInfoLoading(false)
+    fetchProject()
+  }
+
   const handleAssignSupervisor = async () => {
     if (!supervisorEmail.trim()) return
     setAssignLoading(true)
-    setAssignError('')
-    setAssignSuccess('')
-    const res = await fetch(`/api/projects/${projectId}`, {
+    await fetch(`/api/projects/${projectId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ supervisorEmail: supervisorEmail.trim() }),
     })
-    if (res.ok) {
-      setAssignSuccess('Supervisor assigned.')
-      setSupervisorEmail('')
-      fetchProject()
-    } else {
-      const data = await res.json()
-      setAssignError(data.error || 'Failed to assign')
-    }
+    setSupervisorEmail('')
     setAssignLoading(false)
-  }
-
-  const handleRemoveSupervisor = async () => {
-    setAssignLoading(true)
-    setAssignError('')
-    setAssignSuccess('')
-    const res = await fetch(`/api/projects/${projectId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ supervisorEmail: '' }),
-    })
-    if (res.ok) {
-      setAssignSuccess('Supervisor removed.')
-      fetchProject()
-    } else {
-      const data = await res.json()
-      setAssignError(data.error || 'Failed to remove')
-    }
-    setAssignLoading(false)
-  }
-
-  const handleRequestUpdate = async () => {
-    if (!project?.supervisor?.id) return
-    setRequestLoading(true)
-    setRequestMsg('')
-    try {
-      const res = await fetch('/api/notifications', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: project.supervisor.id,
-          type: 'update_request',
-          title: 'Update Requested',
-          message: `Owner requested a progress update for ${project.name}`,
-          link: `/projects/${projectId}`,
-        }),
-      })
-      setRequestMsg(res.ok ? 'Update requested!' : 'Failed to send')
-    } catch {
-      setRequestMsg('Failed to send')
-    }
-    setRequestLoading(false)
+    fetchProject()
   }
 
   const handleSaveGeofence = async () => {
-    if (!geofenceLat || !geofenceLng || !geofenceRadius) return
     setGeofenceLoading(true)
-    setGeofenceMsg('')
     const lat = parseFloat(geofenceLat)
     const lng = parseFloat(geofenceLng)
     const radiusM = parseFloat(geofenceRadius)
+    
+    // Simple boundary generation
     const boundary = Array.from({ length: 8 }, (_, i) => {
       const angle = (i / 8) * 2 * Math.PI
       const dLat = (radiusM / 111320) * Math.cos(angle)
       const dLng = (radiusM / (111320 * Math.cos((lat * Math.PI) / 180))) * Math.sin(angle)
       return { lat: lat + dLat, lng: lng + dLng }
     })
-    const res = await fetch(`/api/projects/${projectId}`, {
+
+    await fetch(`/api/projects/${projectId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ geofence: { center: { lat, lng }, radiusM, boundary } }),
     })
-    setGeofenceMsg(res.ok ? 'Geofence saved.' : 'Failed to save.')
     setGeofenceLoading(false)
-    if (res.ok) fetchProject()
+    fetchProject()
   }
 
-  if (loading) return <p>Loading...</p>
-  if (!project) return <p>Project not found</p>
+  if (loading) return <div className={styles.container}><div className={styles.skeleton} /></div>
+  if (!project) return <div className={styles.container}>Project not found</div>
 
   const isOwner = session?.user?.id === project.owner.id
-  const geofenceSet = project.geofence !== null
+  if (!isOwner) return <div className={styles.container}>Access Denied</div>
 
   return (
-    <>
-      {isOwner && (
-        <>
-          <h1 className={styles.title}>Settings</h1>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>Project Settings</h1>
+        <p className={styles.subtitle}>Manage site details and verification parameters</p>
+      </header>
 
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Site Supervisor</h2>
-            <Card variant="outlined" padding="md">
-              {project.supervisor ? (
-                <div className={styles.supervisorRow}>
-                  <div>
-                    <p className={styles.supervisorName}>
-                      {project.supervisor.name || project.supervisor.email}
-                    </p>
-                    <p className={styles.supervisorEmail}>{project.supervisor.email}</p>
-                  </div>
-                  <div className={styles.supervisorActions}>
-                    <Button size="sm" loading={requestLoading} onClick={handleRequestUpdate}>
-                      Request Update
-                    </Button>
-                    <Button variant="ghost" size="sm" loading={assignLoading} onClick={handleRemoveSupervisor}>
-                      Remove
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <p className={styles.emptyText}>No supervisor assigned yet.</p>
-                  <div className={styles.assignForm}>
-                    <input
-                      className={styles.emailInput}
-                      type="email"
-                      placeholder="supervisor@email.com"
-                      value={supervisorEmail}
-                      onChange={(e) => setSupervisorEmail(e.target.value)}
-                      autoFocus
-                    />
-                    <Button size="sm" loading={assignLoading} disabled={!supervisorEmail.trim()} onClick={handleAssignSupervisor}>
-                      Assign
-                    </Button>
-                  </div>
-                </>
-              )}
-              {assignError && <p className={styles.errorMsg}>{assignError}</p>}
-              {assignSuccess && <p className={styles.successMsg}>{assignSuccess}</p>}
-              {requestMsg && <p className={styles.successMsg}>{requestMsg}</p>}
-            </Card>
+      <div className={styles.sections}>
+        {/* Section 1: Project Info */}
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <Building2 size={20} />
+            <h2 className={styles.sectionTitle}>General Information</h2>
           </div>
-
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Site Geofence</h2>
-            <Card variant="outlined" padding="md">
-              {geofenceSet ? (
-                <div className={styles.geofenceStatus}>
-                  <span className={styles.geofenceActive}><MapPin size={14} /> Active</span>
-                  <span className={styles.emptyText}>Supervisors must capture within the defined boundary.</span>
-                </div>
-              ) : (
-                <p className={styles.geofenceWarning}>
-                  <AlertTriangle size={16} /> No geofence set — location is not enforced.
-                </p>
-              )}
-              <div className={styles.geofenceForm}>
-                <div className={styles.geofenceRow}>
-                  <input className={styles.geoInput} type="number" step="any" placeholder="Center latitude" value={geofenceLat} onChange={(e) => setGeofenceLat(e.target.value)} />
-                  <input className={styles.geoInput} type="number" step="any" placeholder="Center longitude" value={geofenceLng} onChange={(e) => setGeofenceLng(e.target.value)} />
-                </div>
-                <input className={styles.geoInput} type="number" step="1" placeholder="Radius in meters" value={geofenceRadius} onChange={(e) => setGeofenceRadius(e.target.value)} />
-                <Button fullWidth variant="outline" size="sm" loading={geofenceLoading} disabled={!geofenceLat || !geofenceLng || !geofenceRadius} onClick={handleSaveGeofence}>
-                  {geofenceSet ? 'Update Geofence' : 'Save Geofence'}
-                </Button>
-                {geofenceMsg && <p className={styles.successMsg}>{geofenceMsg}</p>}
+          <Card padding="md">
+            <div className={styles.formGrid}>
+              <div className={styles.field}>
+                <label>Project Name</label>
+                <input 
+                  type="text" 
+                  value={projectName} 
+                  onChange={(e) => setProjectName(e.target.value)}
+                  placeholder="e.g. Lekki Duplex" 
+                />
               </div>
-            </Card>
+              <div className={styles.field}>
+                <label>Location</label>
+                <input 
+                  type="text" 
+                  value={location} 
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="e.g. Lagos, Nigeria" 
+                />
+              </div>
+              <div className={styles.field}>
+                <label>Target Completion</label>
+                <div className={styles.inputWithIcon}>
+                  <Calendar size={16} />
+                  <input 
+                    type="date" 
+                    value={targetCompletion}
+                    onChange={(e) => setTargetCompletion(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className={styles.sectionFooter}>
+              <Button size="sm" loading={infoLoading} onClick={handleUpdateInfo}>Save Changes</Button>
+            </div>
+          </Card>
+        </section>
+
+        {/* Section 2: Verification */}
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <Shield size={20} />
+            <h2 className={styles.sectionTitle}>Verification & Geofencing</h2>
           </div>
-        </>
-      )}
-    </>
+          <Card padding="md">
+            <div className={styles.geofenceStatus}>
+              {project.geofence ? (
+                <div className={styles.geofenceActive}>
+                  <MapPin size={16} />
+                  <span>Geofencing is ACTIVE for this site</span>
+                </div>
+              ) : (
+                <div className={styles.geofenceWarning}>
+                  <AlertTriangle size={16} />
+                  <span>No geofence set — location verification is disabled</span>
+                </div>
+              )}
+            </div>
+            <div className={styles.formGrid}>
+              <div className={styles.field}>
+                <label>Latitude</label>
+                <input type="number" step="any" value={geofenceLat} onChange={(e) => setGeofenceLat(e.target.value)} placeholder="0.0000" />
+              </div>
+              <div className={styles.field}>
+                <label>Longitude</label>
+                <input type="number" step="any" value={geofenceLng} onChange={(e) => setGeofenceLng(e.target.value)} placeholder="0.0000" />
+              </div>
+              <div className={styles.field}>
+                <label>Radius (meters)</label>
+                <input type="number" value={geofenceRadius} onChange={(e) => setGeofenceRadius(e.target.value)} placeholder="100" />
+              </div>
+            </div>
+            <div className={styles.sectionFooter}>
+              <Button variant="outline" size="sm" loading={geofenceLoading} onClick={handleSaveGeofence}>
+                {project.geofence ? 'Update Boundary' : 'Enable Geofencing'}
+              </Button>
+            </div>
+          </Card>
+        </section>
+
+        {/* Section 3: Supervisor */}
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <UserPlus size={20} />
+            <h2 className={styles.sectionTitle}>Site Supervisor</h2>
+          </div>
+          <Card padding="md">
+            {project.supervisor ? (
+              <div className={styles.supervisorCard}>
+                <div className={styles.supervisorInfo}>
+                  <strong>{project.supervisor.name || project.supervisor.email}</strong>
+                  <span>{project.supervisor.email}</span>
+                </div>
+                <Button variant="ghost" size="sm" onClick={() => setSupervisorEmail('')}>Change</Button>
+              </div>
+            ) : (
+              <div className={styles.assignRow}>
+                <input 
+                  type="email" 
+                  placeholder="supervisor@email.com" 
+                  value={supervisorEmail}
+                  onChange={(e) => setSupervisorEmail(e.target.value)} 
+                />
+                <Button size="sm" loading={assignLoading} onClick={handleAssignSupervisor}>Assign</Button>
+              </div>
+            )}
+          </Card>
+        </section>
+
+        {/* Section 4: Danger Zone */}
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <Trash2 size={20} style={{ color: 'var(--color-error)' }} />
+            <h2 className={styles.sectionTitle} style={{ color: 'var(--color-error)' }}>Danger Zone</h2>
+          </div>
+          <Card padding="md" className={styles.dangerCard}>
+            <p>Deleting a project is permanent and will remove all audit logs, evidence, and reports.</p>
+            <Button variant="outline" className={styles.deleteBtn}>Delete Project</Button>
+          </Card>
+        </section>
+      </div>
+    </div>
   )
 }

@@ -551,7 +551,7 @@ export default function OnboardingPage() {
                 </Card>
               </div>
               <Button fullWidth size="lg" loading={loading} onClick={handleComplete}>
-                Complete Setup
+                Go to Dashboard
               </Button>
             </div>
           )}

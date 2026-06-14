@@ -1,0 +1,131 @@
+.container {
+  padding: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: var(--typography-title-large-font-size);
+  font-weight: 700;
+  color: var(--color-on-surface);
+}
+
+.inviteBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tableWrapper {
+  background: var(--color-surface);
+  border-radius: 12px;
+  border: 1px solid var(--color-outline-variant);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  padding: 16px;
+  background: var(--color-surface-container-low);
+  font-size: var(--typography-label-medium-font-size);
+  font-weight: 600;
+  color: var(--color-on-surface-variant);
+  border-bottom: 1px solid var(--color-outline-variant);
+}
+
+.table td {
+  padding: 16px;
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface);
+  border-bottom: 1px solid var(--color-outline-variant);
+}
+
+.nameCell {
+  font-weight: 600;
+}
+
+.roleCell {
+  color: var(--color-on-surface-variant);
+}
+
+.phoneCell {
+  font-variant-numeric: tabular-nums;
+}
+
+.statusCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-on-surface-variant);
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast);
+}
+
+.actionBtn:hover {
+  background: var(--color-surface-variant);
+  color: var(--color-on-surface);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--typography-label-medium-font-size);
+  font-weight: 700;
+}
+
+.memberName {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ownerBadge {
+  font-size: var(--typography-label-small-font-size);
+  background: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.skeleton {
+  height: 200px;
+  width: 100%;
+  background: var(--color-surface-variant);
+  border-radius: 12px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}

@@ -1,126 +1,196 @@
-.title {
-  font-size: var(--typography-headline-small-font-size);
-  font-weight: 700;
-  margin-bottom: 20px;
+.container {
+  padding: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-.section {
-  margin-bottom: 24px;
+.header {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: var(--typography-title-large-font-size);
+  font-weight: 700;
+  color: var(--color-on-surface);
+}
+
+.subtitle {
+  font-size: var(--typography-body-medium-font-size);
+  color: var(--color-on-surface-variant);
+  margin-top: 4px;
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: var(--color-primary);
 }
 
 .sectionTitle {
   font-size: var(--typography-title-medium-font-size);
-  font-weight: 600;
-  margin-bottom: 12px;
+  font-weight: 700;
+  color: var(--color-on-surface);
 }
 
-.supervisorRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
 }
 
-.supervisorActions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.supervisorName {
-  font-size: var(--typography-body-large-font-size);
-  font-weight: 500;
-}
-
-.supervisorEmail {
-  font-size: var(--typography-body-small-font-size);
-  color: var(--color-on-surface-variant);
-}
-
-.assignForm {
-  display: flex;
-  gap: 8px;
-}
-
-.emailInput {
-  flex: 1;
-  height: 44px;
-  padding: 0 12px;
-  border: 1px solid var(--color-outline);
-  border-radius: 8px;
-  font-size: var(--typography-body-medium-font-size);
-  outline: none;
-}
-
-.emailInput:focus {
-  border-color: var(--color-primary);
-}
-
-.emptyText {
-  font-size: var(--typography-body-medium-font-size);
-  color: var(--color-on-surface-variant);
-  margin-bottom: 12px;
-}
-
-.errorMsg {
-  color: var(--color-error);
-  font-size: var(--typography-body-small-font-size);
-  margin-top: 8px;
-}
-
-.successMsg {
-  color: var(--color-primary);
-  font-size: var(--typography-body-small-font-size);
-  margin-top: 8px;
-}
-
-.geofenceStatus {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.geofenceActive {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--color-primary);
-  font-weight: 600;
-  font-size: var(--typography-body-medium-font-size);
-}
-
-.geofenceWarning {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--typography-body-medium-font-size);
-  color: var(--color-error);
-  margin-bottom: 12px;
-}
-
-.geofenceForm {
+.field {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.geofenceRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+.field label {
+  font-size: var(--typography-label-medium-font-size);
+  font-weight: 600;
+  color: var(--color-on-surface-variant);
 }
 
-.geoInput {
-  height: 44px;
-  padding: 0 12px;
-  border: 1px solid var(--color-outline);
+.field input {
+  height: 48px;
+  padding: 0 16px;
   border-radius: 8px;
+  border: 1px solid var(--color-outline-variant);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
   font-size: var(--typography-body-medium-font-size);
+  transition: border-color var(--transition-fast);
   outline: none;
+}
+
+.field input:focus {
+  border-color: var(--color-primary);
+}
+
+.inputWithIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWithIcon svg {
+  position: absolute;
+  left: 12px;
+  color: var(--color-on-surface-variant);
+}
+
+.inputWithIcon input {
+  padding-left: 40px;
   width: 100%;
 }
 
-.geoInput:focus {
+.sectionFooter {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.geofenceStatus {
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--color-surface-container-low);
+}
+
+.geofenceActive {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.geofenceWarning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.supervisorCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.supervisorInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.supervisorInfo strong {
+  font-size: var(--typography-body-large-font-size);
+  color: var(--color-on-surface);
+}
+
+.supervisorInfo span {
+  font-size: var(--typography-body-small-font-size);
+  color: var(--color-on-surface-variant);
+}
+
+.assignRow {
+  display: flex;
+  gap: 12px;
+}
+
+.assignRow input {
+  flex: 1;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 8px;
+  border: 1px solid var(--color-outline-variant);
+  outline: none;
+}
+
+.assignRow input:focus {
   border-color: var(--color-primary);
+}
+
+.dangerCard {
+  border: 1px solid var(--color-error-container);
+  background: var(--color-error-container);
+  color: var(--color-on-error-container);
+}
+
+.dangerCard p {
+  font-size: var(--typography-body-medium-font-size);
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+.deleteBtn {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.deleteBtn:hover {
+  background: var(--color-error);
+  color: white;
+}
+
+.skeleton {
+  height: 600px;
+  width: 100%;
+  background: var(--color-surface-variant);
+  border-radius: 12px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
 }
